@@ -1,6 +1,6 @@
-NAME = so_long
+NAME = cub3D
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 MLX_PATH = mlx/
@@ -10,14 +10,7 @@ LIBFT_LIB = $(LIBFT_PATH)libft.a
 
 MLX_FLAGS = -Lmlx -lmlx -lXext -lX11 -lm
 
-CFILES = main.c \
-		 init.c \
-		 move.c \
-		 put_img.c \
-		 parse_input.c \
-		 valid_path.c\
-		 create_map.c \
-		 game_handler.c
+CFILES = $(wildcard *.c) $(wildcard src/*.c)
 
 OBJECTS = $(CFILES:.c=.o)
 

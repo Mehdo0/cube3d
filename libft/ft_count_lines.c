@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_count_lines.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:36:15 by mmouaffa          #+#    #+#             */
-/*   Updated: 2024/10/29 13:36:22 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:01:07 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ int	ft_count_lines(int fd, int x, int img_w)
 {
 	char	*line;
 	int		linecount;
-	int		i;
 
-	i = 0;
 	linecount = 1;
 	while (1)
 	{
