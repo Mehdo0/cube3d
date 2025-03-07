@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:52:15 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/07 11:22:13 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:09:01 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	main(int argc, char **argv)
+#include "../includes/cube3d.h"
+
+int	main()
 {
+	void *mlx = mlx_init();
+	mlx_new_window(mlx, 1900, 1000, "oui");
+	mlx_loop(mlx);
 	return (0);
 }
