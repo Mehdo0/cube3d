@@ -1,43 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/01 22:16:08 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/10/01 22:47:20 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/10/01 19:10:43 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/01 19:13:03 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
-
-void	*ft_calloc(size_t count, size_t size)
+int	ft_tolower(int c)
 {
-	unsigned char	*ret;
-
-	ret = (void *)malloc(count * size);
-	if (!ret)
-		return (NULL);
-	ft_bzero(ret, count * size);
-	return (ret);
+	if (c >= 65 && c <= 90)
+		c += 32;
+	return (c);
 }
 
 /*#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 int main(int ac, char **av)
 {
-	if (ac != 3)
+	if (ac != 2)
 		return (0);
-	size_t count = atoi(av[1]);
-	size_t size = atoi(av[2]);
-	char *ret = ft_calloc(count, size);
-	size_t i = 0;
-	while (i < count * size)
-	{
-		printf("%d", ret[i]);
-		i++;
-	}
+	printf("ma fonction : %c \n", ft_tolower(atoi(av[1])));
+	printf("la vraie : %c \n", tolower(atoi(av[1])));
 	return (0);
 }*/

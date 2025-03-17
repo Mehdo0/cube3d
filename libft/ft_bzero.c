@@ -1,43 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/01 22:16:08 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/10/01 22:47:20 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/09/24 14:56:27 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/09/29 14:49:29 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-void	*ft_calloc(size_t count, size_t size)
+void	ft_bzero(void *s, size_t n)
 {
-	unsigned char	*ret;
+	unsigned char	*res;
+	size_t			i;
 
-	ret = (void *)malloc(count * size);
-	if (!ret)
-		return (NULL);
-	ft_bzero(ret, count * size);
-	return (ret);
+	res = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+		res[i++] = 0;
 }
 
 /*#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main(int ac, char **av)
 {
-	if (ac != 3)
+	if (ac != 2)
 		return (0);
-	size_t count = atoi(av[1]);
-	size_t size = atoi(av[2]);
-	char *ret = ft_calloc(count, size);
+	size_t n = atoi(av[1]);
+	unsigned char *s = malloc(sizeof(unsigned char) * (n));
+	ft_bzero(s, n);
 	size_t i = 0;
-	while (i < count * size)
-	{
-		printf("%d", ret[i]);
-		i++;
-	}
+	printf("ma fonction :\n");
+	while (i < n)
+		printf("%hhu", s[i++]);
+	printf("\n");
+	i = 0;
+	bzero(s, n);
+	bzero(s, n);
+	printf("la vraie fonction :\n");
+	while (i < n)
+		printf("%hhu", s[i++]);
 	return (0);
 }*/

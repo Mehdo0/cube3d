@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count_c.c                                       :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 13:35:58 by mmouaffa          #+#    #+#             */
-/*   Updated: 2024/10/29 13:36:05 by mmouaffa         ###   ########.fr       */
+/*   Created: 2024/10/05 14:27:27 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/05 14:55:20 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_count_c(char *s, char c)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	int	i;
-	int	x;
+	t_list	*tmp;
 
-	i = 0;
-	x = 0;
-	if (!s)
-		return (-1);
-	while (s && s[i])
+	if (!lst || !del)
+		return ;
+	while (*lst)
 	{
-		if (s[i++] == c)
-			x++;
+		tmp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = tmp;
 	}
-	return (x);
+	*lst = NULL;
 }

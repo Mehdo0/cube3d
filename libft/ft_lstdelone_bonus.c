@@ -1,33 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_line_length.c                                   :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 13:36:35 by mmouaffa          #+#    #+#             */
-/*   Updated: 2024/10/29 13:36:39 by mmouaffa         ###   ########.fr       */
+/*   Created: 2024/10/05 14:10:11 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/05 14:22:34 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_line_length(int fd)
+void	ft_lstdelone(t_list *lst, void (*del)(void*))
 {
-	char	buffer[1];
-	int		length;
-	int		bytes;
-
-	buffer[0] = '\0';
-	bytes = 1;
-	length = 0;
-	while (bytes == 1)
-	{
-		bytes = read(fd, buffer, 1);
-		if (buffer[0] != '\n')
-			length++;
-		else
-			break ;
-	}
-	return (length);
+	if (!lst || !del)
+		return ;
+	del(lst->content);
+	free(lst);
 }

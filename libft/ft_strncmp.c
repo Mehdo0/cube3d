@@ -1,37 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/01 21:32:50 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/10/03 17:53:16 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/10/01 19:50:03 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/03 17:48:36 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
-	size_t	j;
 
 	i = 0;
-	if (!needle[0])
-		return ((char *)haystack);
-	while (haystack[i] && i < len)
+	if (n == 0)
+		return (0);
+	while (s1[i] && s2[i] && i < n)
 	{
-		j = 0;
-		while (i + j < len && haystack[i + j] == needle[j])
-		{
-			if (needle[j + 1] == '\0')
-				return ((char *)haystack + i);
-			j++;
-		}
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 		i++;
 	}
-	return (NULL);
+	if (i == n)
+		i -= 1;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
 /*#include <stdio.h>
@@ -42,7 +38,7 @@ int main(int ac, char **av)
 {
 	if (ac != 4)
 		return (0);
-	printf("ma fonction : %s \n", ft_strnstr(av[1], av[2], atoi(av[3])));
-	printf("la vraie : %s \n", strnstr(av[1], av[2], atoi(av[3])));
+	printf("ma fonction : %d \n", ft_strncmp(av[1], av[2], (size_t)atoi(av[3])));
+	printf("la vraie : %d \n", strncmp(av[1], av[2], (size_t)atoi(av[3])));
 	return (0);
 }*/

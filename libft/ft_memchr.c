@@ -1,43 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/01 22:16:08 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/10/01 22:47:20 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/10/01 20:32:41 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/01 21:55:33 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-void	*ft_calloc(size_t count, size_t size)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	unsigned char	*ret;
+	size_t			i;
+	unsigned char	*str;
 
-	ret = (void *)malloc(count * size);
-	if (!ret)
-		return (NULL);
-	ft_bzero(ret, count * size);
-	return (ret);
+	i = 0;
+	str = (unsigned char *)s;
+	while (i < n)
+	{
+		if (str[i] == (unsigned char)c)
+			return (str + i);
+		i++;
+	}
+	return (NULL);
 }
 
 /*#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main(int ac, char **av)
 {
 	if (ac != 3)
 		return (0);
-	size_t count = atoi(av[1]);
-	size_t size = atoi(av[2]);
-	char *ret = ft_calloc(count, size);
-	size_t i = 0;
-	while (i < count * size)
-	{
-		printf("%d", ret[i]);
-		i++;
-	}
+	printf("ma fonction : %s \n", (char *)ft_memchr
+	(av[1], atoi(av[2]), sizeof(av[1])));
+	printf("la vraie : %s \n", (char *)memchr
+	(av[1], atoi(av[2]), sizeof(av[1])));
 	return (0);
 }*/

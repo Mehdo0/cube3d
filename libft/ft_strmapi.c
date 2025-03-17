@@ -1,43 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/01 22:16:08 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/10/01 22:47:20 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/10/03 15:56:24 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/05 09:36:20 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-void	*ft_calloc(size_t count, size_t size)
+char	*ft_strmapi(char const *s, char (*f)(unsigned	int, char))
 {
-	unsigned char	*ret;
+	int		i;
+	char	*ret;
 
-	ret = (void *)malloc(count * size);
+	i = 0;
+	if (!s || !f)
+		return (NULL);
+	while (s[i])
+		i++;
+	ret = (char *)malloc(sizeof(char) * (i + 1));
 	if (!ret)
 		return (NULL);
-	ft_bzero(ret, count * size);
+	i = -1;
+	while (s[++i])
+		ret[i] = f(i, s[i]);
+	ret[i] = '\0';
 	return (ret);
 }
 
-/*#include <stdio.h>
+/*char change_case(unsigned int index, char c)
+{
+	(void)index;
+	if (c >= 97 && c <= 122)
+		c -= 32;
+	return (c);
+}
+
+#include <stdio.h>
+#include <ctype.h>
 
 int main(int ac, char **av)
 {
-	if (ac != 3)
+	if (ac != 2)
 		return (0);
-	size_t count = atoi(av[1]);
-	size_t size = atoi(av[2]);
-	char *ret = ft_calloc(count, size);
-	size_t i = 0;
-	while (i < count * size)
-	{
-		printf("%d", ret[i]);
-		i++;
-	}
+	printf("%s", ft_strmapi(av[1], change_case));
 	return (0);
 }*/

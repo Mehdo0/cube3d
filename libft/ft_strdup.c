@@ -3,29 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 11:50:02 by mmouaffa          #+#    #+#             */
-/*   Updated: 2024/11/04 11:50:14 by mmouaffa         ###   ########.fr       */
+/*   Created: 2024/10/01 22:50:23 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/05 09:36:06 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup(const char *s1)
 {
-	char	*dup;
 	int		i;
+	char	*ret;
 
 	i = 0;
-	dup = malloc(ft_strlen((char *)s) + 1);
-	if (dup == NULL)
-		return (NULL);
-	while (s[i])
-	{
-		dup[i] = s[i];
+	while (s1[i])
 		i++;
+	ret = (char *)malloc(sizeof(char) * (i + 1));
+	if (!ret)
+		return (NULL);
+	while (i >= 0)
+	{
+		ret[i] = s1[i];
+		i--;
 	}
-	dup[i] = '\0';
-	return (dup);
+	return (ret);
 }
+
+/*#include <stdio.h>
+#include <string.h>
+
+int main(int ac, char **av)
+{
+	if (ac != 2)
+		return (0);
+	printf("ma fonction : %s \n", ft_strdup(av[1]));
+	printf("la vraie : %s \n", strdup(av[1]));
+	return (0);
+}*/

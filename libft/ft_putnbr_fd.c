@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/22 20:07:27 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/09/29 14:52:11 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/10/04 18:50:21 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/04 19:42:16 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+void	ft_putchar(char c, int fd)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	write(fd, &c, 1);
 }
 
-/*#include <stdio.h>
-#include <string.h>
-
-int main(int ac, char **av)
+void	ft_putnbr_fd(int n, int fd)
 {
-	if (ac != 2)
-		return (0);
-	const char *s = av[1];
-	printf("ma fonction : %zu\n", ft_strlen(s));
-	printf("la vraie : %zu\n", ft_strlen(s));
-	return (0);
-}*/
+	long	nb;
+
+	nb = n;
+	if (nb < 0)
+	{
+		write(fd, "-", 1);
+		nb = -nb;
+	}
+	if (nb > 9)
+		ft_putnbr_fd(nb / 10, fd);
+	ft_putchar("0123456789"[nb % 10], fd);
+}

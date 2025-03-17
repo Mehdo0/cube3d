@@ -3,28 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 13:36:47 by mmouaffa          #+#    #+#             */
-/*   Updated: 2024/10/29 13:36:53 by mmouaffa         ###   ########.fr       */
+/*   Created: 2024/10/01 19:14:18 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/05 18:20:22 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
 char	*ft_strchr(const char *s, int c)
 {
-	char	a;
-	int		i;
+	int	i;
 
-	if (!s)
-		return (NULL);
-	a = c;
 	i = 0;
-	while (s && s[i] != '\0' && s[i] != a)
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return ((char *)s + i);
 		i++;
-	if (s[i] == a)
-		return ((char *)(s + i));
-	else
-		return (NULL);
+	}
+	if (s[i] == (char)c)
+		return ((char *)s + i);
+	return (0);
 }
+
+/*#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int ac, char **av)
+{
+	if (ac != 3)
+		return (0);
+	printf("ma fonction : %s \n", ft_strchr(av[1], atoi(av[2])));
+	printf("la vraie : %s \n", strchr(av[1], atoi(av[2])));
+	return (0);
+}*/

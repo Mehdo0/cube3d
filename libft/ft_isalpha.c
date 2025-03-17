@@ -1,43 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/01 22:16:08 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/10/01 22:47:20 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/09/20 23:35:22 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/09/29 14:49:59 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
-
-void	*ft_calloc(size_t count, size_t size)
+int	ft_isalpha(int c)
 {
-	unsigned char	*ret;
-
-	ret = (void *)malloc(count * size);
-	if (!ret)
-		return (NULL);
-	ft_bzero(ret, count * size);
-	return (ret);
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return (1);
+	return (0);
 }
 
 /*#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 int main(int ac, char **av)
 {
-	if (ac != 3)
+	if (ac != 2)
 		return (0);
-	size_t count = atoi(av[1]);
-	size_t size = atoi(av[2]);
-	char *ret = ft_calloc(count, size);
-	size_t i = 0;
-	while (i < count * size)
-	{
-		printf("%d", ret[i]);
-		i++;
-	}
+	int c = atoi(av[1]);
+	printf("le résultat de mon isalpha : %d\n", ft_isalpha(c));
+	printf("le résultat du vrai isalpha : %d\n", isalpha(c));
+	printf("C est : %c\n", c);
 	return (0);
 }*/

@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/22 20:07:27 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/09/29 14:52:11 by kgiraud          ###   ########.fr       */
+/*   Created: 2024/10/05 15:02:31 by kgiraud           #+#    #+#             */
+/*   Updated: 2024/10/06 21:53:52 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	size_t	i;
+	t_list	*tmp;
+	t_list	*new_list;
+	void	*content;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	new_list = NULL;
+	while (lst)
+	{
+		content = f(lst->content);
+		tmp = ft_lstnew(content);
+		if (!tmp)
+		{
+			del(content);
+			ft_lstclear(&new_list, del);
+			return (NULL);
+		}
+		ft_lstadd_back(&new_list, tmp);
+		lst = lst->next;
+	}
+	return (new_list);
 }
-
-/*#include <stdio.h>
-#include <string.h>
-
-int main(int ac, char **av)
-{
-	if (ac != 2)
-		return (0);
-	const char *s = av[1];
-	printf("ma fonction : %zu\n", ft_strlen(s));
-	printf("la vraie : %zu\n", ft_strlen(s));
-	return (0);
-}*/
