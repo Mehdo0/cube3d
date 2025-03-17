@@ -1,66 +1,54 @@
+# Nom de l'exécutable
 NAME = so_long
 
+# Compilateur et options
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -I../includes -I../mlx -I../libft
 
-MLX_PATH = mlx/
-MLX_LIB = $(MLX_PATH)libmlx.a
-LIBFT_PATH = libft/
-LIBFT_LIB = $(LIBFT_PATH)libft.a
+# Dossiers et librairies
+MLX_DIR = ../mlx
+LIBFT_DIR = ../libft
+MLX_LIB = $(MLX_DIR)/libmlx.a
+LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
-MLX_FLAGS = -Lmlx -lmlx -lXext -lX11 -lm
+# Flags de linkage
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
+LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
 
-CFILES = main.c \
-		 init.c \
-		 move.c \
-		 put_img.c \
-		 parse_input.c \
-		 valid_path.c\
-		 create_map.c \
-		 game_handler.c
+# Sources et objets
+SRCS = main.c init.c move.c put_img.c parse_input.c valid_path.c create_map.c game_handler.c
+OBJS = $(SRCS:.c=.o)
 
-OBJECTS = $(CFILES:.c=.o)
-
-G = \033[32m
-R = \033[31m
-Y = \033[33m
-B = \033[34m
-X = \033[0m
-
+# Règle principale
 all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
 
-%.o : %.c
-	@echo "$(Y)Compiling [$<]...$(X)"
-	@$(CC) $(CFLAGS) -Imlx -c -o $@ $<
+$(NAME): $(OBJS)
+	@echo "🔗 Linking objects to create $(NAME)..."
+	@$(CC) $(CFLAGS) $(OBJS) $(MLX_LIB) $(LIBFT_LIB) $(MLX_FLAGS) $(LIBFT_FLAGS) -o $(NAME)
 
-$(NAME): $(OBJECTS)
-	@echo "$(Y)Linking objects to create [$(NAME)]...$(X)"
-	@$(CC) $(CFLAGS) $(MLX_FLAGS) $(OBJECTS) $(MLX_LIB) $(LIBFT_LIB) -o $(NAME)
-	@echo "$(G)Finished [$(NAME)]$(X)"
-
+# Compilation de MLX
 $(MLX_LIB):
-	@echo "$(B)Building MLX...$(X)"
-	@make -C $(MLX_PATH) all
+	@echo "🛠 Building MiniLibX..."
+	@make -C $(MLX_DIR)
 
+# Compilation de Libft
 $(LIBFT_LIB):
-	@echo "$(B)Building Libft...$(X)"
-	@make -C $(LIBFT_PATH) all
+	@echo "🛠 Building Libft..."
+	@make -C $(LIBFT_DIR)
 
+# Nettoyage
 clean:
-	@make -C $(MLX_PATH) clean
-	@make -C $(LIBFT_PATH) clean
-	@rm -f $(OBJECTS)
-	@echo "$(R)Removed objects$(X)"
+	@make -C $(MLX_DIR) clean
+	@make -C $(LIBFT_DIR) clean
+	@rm -f $(OBJS)
+	@echo "🧹 Cleaned object files."
 
 fclean: clean
-	@make -C $(MLX_PATH) clean
-	@make -C $(LIBFT_PATH) fclean
+	@make -C $(MLX_DIR) clean
+	@make -C $(LIBFT_DIR) fclean
 	@rm -f $(NAME)
-	@echo "$(R)Removed executable $(NAME)$(X)"
+	@echo "🗑 Removed executable $(NAME)."
 
 re: fclean all
 
-norm:
-	@norminette $(CFILES) $(LIBFT_PATH)
-
-.PHONY: all clean fclean re norm
+.PHONY: all clean fclean re

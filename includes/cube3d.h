@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/07 11:24:47 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:15:46 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CUB3D
 
 # include "../libft/libft.h"
+# include "../mlx/mlx.h"
 
 # include <stdlib.h>
 # include <stdio.h>
