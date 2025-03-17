@@ -6,28 +6,11 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:42:54 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 14:13:37 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 22:18:45 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
-
-static char	*ft_strtrim(char *s)
-{
-	char	*start;
-	char	*end;
-
-	while (ft_isspace((unsigned char)*s))
-		s++;
-	if (*s == '\0')
-		return (s);
-	start = s;
-	end = s + ft_strlen(s) - 1;
-	while (end > start && ft_isspace((unsigned char)*end))
-		end--;
-	*(end + 1) = '\0';
-	return (s);
-}
 
 static int	ft_parse_color(const char *str, int color[3])
 {
@@ -39,12 +22,12 @@ static int	ft_parse_color(const char *str, int color[3])
 	if (!tmp)
 		ft_map_error("Error\nMemory allocation failed\n");
 	i = 0;
-	token = strtok(tmp, ",");
+	token = ft_strtok(tmp, ",");
 	while (token && i < 3)
 	{
 		color[i] = ft_atoi(token);
 		i++;
-		token = strtok(NULL, ",");
+		token = ft_strtok(NULL, ",");
 	}
 	free(tmp);
 	if (i != 3)
@@ -58,7 +41,7 @@ static void	ft_parse_config_line(t_config *config, char *line)
 	char	*path;
 	char	*color_str;
 
-	trimmed = ft_strtrim(line);
+	trimmed = ft_strtrim(line, " ");
 	if (ft_strncmp(trimmed, "NO", 2) == 0)
 	{
 		path = trimmed + 2;
@@ -109,16 +92,16 @@ static void	ft_add_map_line(t_config *config, char *line)
 {
 	char	**tmp;
 
-	tmp = realloc(config->map, sizeof(char *) * (config->map_height + 1));
+	tmp = realloc(config->map.grid, sizeof(char *) * (config->map.height + 1));
 	if (!tmp)
 		ft_map_error("Error\nMemory allocation failed\n");
-	config->map = tmp;
-	config->map[config->map_height] = strdup(line);
-	if (!config->map[config->map_height])
+	config->map.grid = tmp;
+	config->map.grid[config->map.height] = ft_strdup(line);
+	if (!config->map.grid[config->map.height])
 		ft_map_error("Error\nMemory allocation failed\n");
-	if ((int)ft_strlen(line) > config->map_width)
-		config->map_width = ft_strlen(line);
-	config->map_height++;
+	if ((int)ft_strlen(line) > config->map.width)
+		config->map.width = ft_strlen(line);
+	config->map.height++;
 }
 
 static void	ft_parse_file(const char *filename, t_config *config)
@@ -159,12 +142,12 @@ void	ft_free_config(t_config *config)
 	if (config->ea)
 		free(config->ea);
 	i = 0;
-	while (i < config->map_height)
+	while (i < config->map.height)
 	{
-		free(config->map[i]);
+		free(config->map.grid[i]);
 		i++;
 	}
-	free(config->map);
+	free(config->map.grid);
 }
 
 t_config	*ft_init_and_parse_map(const char *filename)
@@ -173,5 +156,6 @@ t_config	*ft_init_and_parse_map(const char *filename)
 
 	config = ft_init_config();
 	ft_parse_file(filename, config);
+	initPlayer(&config->player, &config->map);
 	return (config);
 }

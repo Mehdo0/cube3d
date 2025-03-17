@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/17 14:33:37 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/03/17 22:50:26 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,36 @@
 
 # include <stdlib.h>
 # include <stdio.h>
+# include <math.h>
 
 # define MAX_LINE 1024
+# define screenWidth 1920
+# define screenHeight 1080
+# define KEY_UP 13
+# define KEY_DOWN 1
+# define KEY_LEFT 0
+# define KEY_RIGHT 2
+# define texHeight 64
+# define texWidth 64
 
+// Structure pour le joueur
 typedef struct s_player
 {
-    float	x;
-    float	y;
-    float	dir;
-    float	fov;
-}    t_player;
+    float posX;
+	float posY;
+	float dirY;
+	float planeY;
+    float dirX;
+    float planeX;
+}	 t_player;
+
+// Structure pour la carte
+typedef struct s_map
+{
+    char	**grid;
+    int		width;
+	int		height;
+} 	t_map;
 
 typedef struct s_img
 {
@@ -47,23 +67,45 @@ typedef struct s_config
 	char	*ea;
 	int		floor[3];
 	int		ceiling[3];
-	char	**map;
-	int		map_width;
-	int		map_height;
+	t_map	map;
+	t_player player;
 }	t_config;
+
+typedef struct s_keys {
+    int up;    // Avancer
+    int down;  // Reculer
+    int left;  // Tourner à gauche
+    int right; // Tourner à droite
+} t_keys;
+
 
 typedef struct s_env
 {
-	void	*mlx;
-	void	*win;
-}    t_env;
+    void *mlx;
+    void *win;
+    t_config *config;
+	t_keys keys;
+    void *img;
+    char *addr;
+    int bits_per_pixel;
+    int line_length;
+    int endian;
+	t_img *img_textures;
+} t_env;
 
 // hook
-void	handle_hook(t_env *env);
+void			handle_hook(t_env *env);
+int 			key_press(int keycode, t_env *env);
+int 			key_release(int keycode, t_env *env);
+int 			close_window(t_env *env);
+int 			dites_oui_aux_hook(int key, t_env *env);
 
 /* Prototype de init.c */
 
 t_config        *ft_init_config(void);
+void            initPlayer(t_player *player, t_map *map);
+t_map           init_map(void);
+void			load_textures(t_env *env);
 
 /* Prototype de parsing.c*/
 
@@ -75,5 +117,22 @@ void	        ft_free_config(t_config *config);
 void	        ft_map_error(char *error_msg);
 int             ft_isspace(char s);
 char	        *ft_strtok(char *str, const char *delim);
+size_t	        ft_strcspn(const char *s, const char *reject);
+int				create_rgb(int r, int g, int b);
+
+/* Prototype de render.c */
+
+int             render_frame(t_env *env);
+
+/* prototype de raycast.c */
+
+void            castRays(t_env *env);
+void 			movePlayer(t_env *env, float moveSpeed, float rotSpeed);
+void 			drawVerticalLine(t_env *env, int x, int drawStart, int drawEnd, int color);
+void 			drawTexturedLine(t_env *env, int x, int drawStart, int drawEnd, void *texture, int texX);
+
+/* prototype de minimap.c */
+
+void            draw_minimap(t_env *env);
 
 #endif

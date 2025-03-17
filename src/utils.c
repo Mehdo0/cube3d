@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:01:50 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 14:12:54 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 22:18:57 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,33 @@ char	*ft_strtok(char *str, const char *delim)
 		save++;
 	}
 	return (token);
+}
+
+/*
+** ft_strcspn : renvoie la longueur initiale de la portion de s
+** qui ne contient aucun caractère présent dans reject.
+*/
+size_t	ft_strcspn(const char *s, const char *reject)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (s[i])
+	{
+		j = 0;
+		while (reject[j])
+		{
+			if (s[i] == reject[j])
+				return (i);
+			j++;
+		}
+		i++;
+	}
+	return (i);
+}
+
+int	create_rgb(int r, int g, int b)
+{
+	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
