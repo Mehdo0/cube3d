@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/17 14:17:26 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:33:37 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,15 @@ typedef struct s_config
 	int		map_width;
 	int		map_height;
 }	t_config;
+
+typedef struct s_env
+{
+	void	*mlx;
+	void	*win;
+}    t_env;
+
+// hook
+void	handle_hook(t_env *env);
 
 /* Prototype de init.c */
 
