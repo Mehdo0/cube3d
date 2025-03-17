@@ -15,7 +15,7 @@ LIBFT_LIB = $(LIBFT_PATH)libft.a
 MLX_FLAGS = -L$(MLX_PATH) -lmlx -L/usr/lib -lXext -lX11 -lXrandr -lXrender -lm -lz -lpthread
 
 # Fichiers sources
-CFILES = $(wildcard *.c) $(wildcard src/*.c)
+CFILES = $(wildcard *.c) $(wildcard src/*.c) $(wildcard src/*/*.c)
 
 # Objets
 OBJECTS = $(CFILES:.c=.o)
