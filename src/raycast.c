@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:02:32 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 22:50:50 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 23:23:45 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,16 +144,24 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
 {
     t_player *player = &env->config->player;
     t_map *map = &env->config->map;
+    float collision_margin = 0.2;  // Marge pour éviter de coller aux murs
     
     // Avancer
     if (env->keys.up) {
         float newX = player->posX + player->dirX * moveSpeed;
         float newY = player->posY + player->dirY * moveSpeed;
         
-        if (map->grid[(int)player->posY][(int)newX] == '0')
-            player->posX = newX;
-        if (map->grid[(int)newY][(int)player->posX] == '0')
-            player->posY = newY;
+        // Vérifier si la nouvelle position est valide (pas dans un mur)
+        if (newX >= 0 && newY >= 0 && 
+            newX < map->width && newY < map->height) {
+            // Vérifier les collisions avec marge
+            if (map->grid[(int)player->posY][(int)(newX + collision_margin * player->dirX)] == '0' &&
+                map->grid[(int)player->posY][(int)(newX - collision_margin * player->dirX)] == '0')
+                player->posX = newX;
+            if (map->grid[(int)(newY + collision_margin * player->dirY)][(int)player->posX] == '0' &&
+                map->grid[(int)(newY - collision_margin * player->dirY)][(int)player->posX] == '0')
+                player->posY = newY;
+        }
     }
     
     // Reculer
@@ -161,10 +169,50 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
         float newX = player->posX - player->dirX * moveSpeed;
         float newY = player->posY - player->dirY * moveSpeed;
         
-        if (map->grid[(int)player->posY][(int)newX] == '0')
-            player->posX = newX;
-        if (map->grid[(int)newY][(int)player->posX] == '0')
-            player->posY = newY;
+        if (newX >= 0 && newY >= 0 && 
+            newX < map->width && newY < map->height) {
+            // Vérifier les collisions avec marge
+            if (map->grid[(int)player->posY][(int)(newX + collision_margin * -player->dirX)] == '0' &&
+                map->grid[(int)player->posY][(int)(newX - collision_margin * -player->dirX)] == '0')
+                player->posX = newX;
+            if (map->grid[(int)(newY + collision_margin * -player->dirY)][(int)player->posX] == '0' &&
+                map->grid[(int)(newY - collision_margin * -player->dirY)][(int)player->posX] == '0')
+                player->posY = newY;
+        }
+    }
+    
+    // Déplacement latéral gauche
+    if (env->keys.strafe_left) {
+        float dirX_perp = -player->dirY;  // Direction perpendiculaire (à gauche)
+        float dirY_perp = player->dirX;
+        
+        float newX = player->posX + dirX_perp * moveSpeed;
+        float newY = player->posY + dirY_perp * moveSpeed;
+        
+        if (newX >= 0 && newY >= 0 && 
+            newX < map->width && newY < map->height) {
+            if (map->grid[(int)player->posY][(int)newX] == '0')
+                player->posX = newX;
+            if (map->grid[(int)newY][(int)player->posX] == '0')
+                player->posY = newY;
+        }
+    }
+    
+    // Déplacement latéral droit
+    if (env->keys.strafe_right) {
+        float dirX_perp = player->dirY;  // Direction perpendiculaire (à droite)
+        float dirY_perp = -player->dirX;
+        
+        float newX = player->posX + dirX_perp * moveSpeed;
+        float newY = player->posY + dirY_perp * moveSpeed;
+        
+        if (newX >= 0 && newY >= 0 && 
+            newX < map->width && newY < map->height) {
+            if (map->grid[(int)player->posY][(int)newX] == '0')
+                player->posX = newX;
+            if (map->grid[(int)newY][(int)player->posX] == '0')
+                player->posY = newY;
+        }
     }
     
     // Tourner à gauche

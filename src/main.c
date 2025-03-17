@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:19:01 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 22:48:04 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 23:33:34 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,17 @@ int main(int ac, char **av)
     if (ac != 2)
         ft_map_error("Error\nInvalid number of arguments\n");
     
-    // Initialiser MLX et la fenêtre
+    // Initialize MLX and window
     env.mlx = mlx_init();
     env.win = mlx_new_window(env.mlx, screenWidth, screenHeight, "Cube3D");
     
-    // Initialiser la configuration et parser la carte
+    printf("DEBUG: About to parse map: %s\n", av[1]);
+    // Initialize config and parse map
     env.config = ft_init_and_parse_map(av[1]);
-
-	// Dans main.c, après avoir initialisé env.config
-	env.config = ft_init_and_parse_map(av[1]);
-	load_textures(&env);
+    printf("DEBUG: Map parsing complete\n");
+    
+    // Remove the duplicate line
+    load_textures(&env);
     
     // Configurer les hooks pour les événements
     mlx_hook(env.win, 2, 1L<<0, key_press, &env);   // Touche pressée

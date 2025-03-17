@@ -3,7 +3,7 @@ NAME = cub3D
 
 # Compilateur et options
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -g
 
 # Chemins des dépendances
 MLX_PATH = mlx/

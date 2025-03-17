@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:56:24 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 22:19:16 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 23:36:12 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,23 @@
 t_config	*ft_init_config(void)
 {
 	t_config	*config;
-
-	config = malloc(sizeof(t_config));
-	
-	if (!config)
-		ft_map_error("Error\nMemory allocation failed\n");
+    
+    printf("DEBUG: Allocating config memory\n");
+    config = malloc(sizeof(t_config));
+    if (!config) {
+        printf("DEBUG: Failed to allocate config\n");
+        ft_map_error("Error\nMemory allocation failed\n");
+    }
+    printf("DEBUG: Initializing map\n");
 	config->map = init_map();
+	// Remove this condition - it's causing the error since grid is supposed to be NULL at init
+	/*
 	if (!config->map.grid)
+	{
 		ft_map_error("Error\nMemory allocation failed\n");
+		printf("DEBUG: Map grid is NULL as expected after init_map\n");
+	}
+	*/
 	config->no = NULL;
 	config->so = NULL;
 	config->we = NULL;

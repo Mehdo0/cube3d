@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:42:54 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 22:18:45 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 23:33:11 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,20 @@ static void	ft_parse_config_line(t_config *config, char *line)
 
 static void	ft_add_map_line(t_config *config, char *line)
 {
-	char	**tmp;
-
-	tmp = realloc(config->map.grid, sizeof(char *) * (config->map.height + 1));
-	if (!tmp)
-		ft_map_error("Error\nMemory allocation failed\n");
-	config->map.grid = tmp;
-	config->map.grid[config->map.height] = ft_strdup(line);
-	if (!config->map.grid[config->map.height])
-		ft_map_error("Error\nMemory allocation failed\n");
+	char **tmp;
+	printf("DEBUG: Adding map line: %s (height: %d)\n", line, config->map.height);
+    tmp = realloc(config->map.grid, sizeof(char *) * (config->map.height + 1));
+    if (!tmp) {
+        printf("DEBUG: Failed to reallocate grid for line %d\n", config->map.height);
+        ft_map_error("Error\nMemory allocation failed\n");
+    }
+    config->map.grid = tmp;
+    printf("DEBUG: Duplicating line\n");
+    config->map.grid[config->map.height] = ft_strdup(line);
+    if (!config->map.grid[config->map.height]) {
+        printf("DEBUG: Failed to duplicate line %d\n", config->map.height);
+        ft_map_error("Error\nMemory allocation failed\n");
+    }
 	if ((int)ft_strlen(line) > config->map.width)
 		config->map.width = ft_strlen(line);
 	config->map.height++;
@@ -106,17 +111,21 @@ static void	ft_add_map_line(t_config *config, char *line)
 
 static void	ft_parse_file(const char *filename, t_config *config)
 {
-	FILE	*fp;
-	char	line[MAX_LINE];
-	int		map_started;
-
-	map_started = 0;
-	fp = fopen(filename, "r");
-	if (!fp)
-		ft_map_error("Error\nUnable to open file\n");
-	while (fgets(line, sizeof(line), fp))
-	{
-		line[ft_strcspn(line, "\n")] = '\0';
+	FILE *fp;
+    char line[MAX_LINE];
+    int map_started = 0;
+    
+    printf("DEBUG: Opening file: %s\n", filename);
+    fp = fopen(filename, "r");
+    if (!fp) {
+        printf("DEBUG: Failed to open file\n");
+        ft_map_error("Error\nUnable to open file\n");
+    }
+    
+    while (fgets(line, sizeof(line), fp))
+    {
+        line[ft_strcspn(line, "\n")] = '\0';
+        printf("DEBUG: Read line: '%s'\n", line);
 		if (line[0] == '\0')
 			continue ;
 		if (!map_started && (ft_isdigit(line[0]) || line[0] == ' '))

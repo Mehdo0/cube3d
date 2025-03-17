@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/17 22:50:26 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/17 23:24:03 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
+# include <time.h>
 
 # define MAX_LINE 1024
 # define screenWidth 1920
@@ -72,10 +73,13 @@ typedef struct s_config
 }	t_config;
 
 typedef struct s_keys {
-    int up;    // Avancer
-    int down;  // Reculer
-    int left;  // Tourner à gauche
-    int right; // Tourner à droite
+    int up;            // Avancer
+    int down;          // Reculer
+    int left;          // Tourner à gauche
+    int right;         // Tourner à droite
+    int strafe_left;   // Déplacement latéral gauche
+    int strafe_right;  // Déplacement latéral droit
+    int action;        // Action (pour portes, etc.)
 } t_keys;
 
 
@@ -123,6 +127,8 @@ int				create_rgb(int r, int g, int b);
 /* Prototype de render.c */
 
 int             render_frame(t_env *env);
+void            render_ceiling_floor(t_env *env);
+int             fps_counter(t_env *env);
 
 /* prototype de raycast.c */
 
