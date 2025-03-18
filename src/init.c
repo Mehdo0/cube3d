@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:56:24 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 23:36:12 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:58:12 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,21 +101,80 @@ t_map init_map(void)
 	return (map);
 }
 
+// void	load_textures(t_env *env)
+// {
+//     int	width;
+//     int	height;
+
+//     env->img_textures = malloc(sizeof(t_img));
+//     if (!env->img_textures)
+//         ft_map_error("Error\nMemory allocation failed\n");
+
+//     printf("DEBUG: Loading texture: %s\n", env->config->no);
+//     env->img_textures->wall_N = mlx_xpm_file_to_image(env->mlx, env->config->no, &width, &height);
+//     printf("DEBUG: Loading texture: %s\n", env->config->so);
+//     env->img_textures->wall_S = mlx_xpm_file_to_image(env->mlx, env->config->so, &width, &height);
+//     printf("DEBUG: Loading texture: %s\n", env->config->ea);
+//     env->img_textures->wall_E = mlx_xpm_file_to_image(env->mlx, env->config->ea, &width, &height);
+//     printf("DEBUG: Loading texture: %s\n", env->config->we);
+//     env->img_textures->wall_W = mlx_xpm_file_to_image(env->mlx, env->config->we, &width, &height);
+
+//     if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
+//         !env->img_textures->wall_E || !env->img_textures->wall_W)
+//     {
+//         ft_map_error("Error\nFailed to load textures\n");
+//     }
+// }
+
 void	load_textures(t_env *env)
 {
-	int	width;
-	int	height;
+    int	width = 64;
+    int	height = 64;
+    int	color_N = 0xFF0000; // Rouge
+    int	color_S = 0x00FF00; // Vert
+    int	color_E = 0x0000FF; // Bleu
+    int	color_W = 0xFFFF00; // Jaune
 
-	env->img_textures = malloc(sizeof(t_img));
-	if (!env->img_textures)
-		ft_map_error("Error\nMemory allocation failed\n");
-	
-	env->img_textures->wall_N = mlx_xpm_file_to_image(env->mlx, env->config->no, &width, &height);
-	env->img_textures->wall_S = mlx_xpm_file_to_image(env->mlx, env->config->so, &width, &height);
-	env->img_textures->wall_E = mlx_xpm_file_to_image(env->mlx, env->config->ea, &width, &height);
-	env->img_textures->wall_W = mlx_xpm_file_to_image(env->mlx, env->config->we, &width, &height);
-	
-	if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
-		!env->img_textures->wall_E || !env->img_textures->wall_W)
-		ft_map_error("Error\nFailed to load textures\n");
+    env->img_textures = malloc(sizeof(t_img));
+    if (!env->img_textures)
+        ft_map_error("Error\nMemory allocation failed\n");
+
+    // Créer des images unicolores
+    env->img_textures->wall_N = mlx_new_image(env->mlx, width, height);
+    env->img_textures->wall_S = mlx_new_image(env->mlx, width, height);
+    env->img_textures->wall_E = mlx_new_image(env->mlx, width, height);
+    env->img_textures->wall_W = mlx_new_image(env->mlx, width, height);
+
+    // Remplir les images avec les couleurs
+    int *data;
+    int size = width * height;
+
+    data = (int *)mlx_get_data_addr(env->img_textures->wall_N, &width, &height, &width);
+    for (int i = 0; i < size; i++) data[i] = color_N;
+
+    data = (int *)mlx_get_data_addr(env->img_textures->wall_S, &width, &height, &width);
+    for (int i = 0; i < size; i++) data[i] = color_S;
+
+    data = (int *)mlx_get_data_addr(env->img_textures->wall_E, &width, &height, &width);
+    for (int i = 0; i < size; i++) data[i] = color_E;
+
+    data = (int *)mlx_get_data_addr(env->img_textures->wall_W, &width, &height, &width);
+    for (int i = 0; i < size; i++) data[i] = color_W;
+
+    if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
+        !env->img_textures->wall_E || !env->img_textures->wall_W)
+    {
+        ft_map_error("Error\nFailed to create color textures\n");
+    }
+}
+
+void init_keys(t_keys *keys)
+{
+    keys->up = 0;
+    keys->down = 0;
+    keys->strafe_left = 0;
+    keys->strafe_right = 0;
+    keys->left = 0;
+    keys->right = 0;
+    keys->action = 0;
 }

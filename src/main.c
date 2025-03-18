@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:19:01 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 23:33:34 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:59:18 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int main(int ac, char **av)
     env.config = ft_init_and_parse_map(av[1]);
     printf("DEBUG: Map parsing complete\n");
     
+	init_keys(&env.keys);
+
     // Remove the duplicate line
     load_textures(&env);
     

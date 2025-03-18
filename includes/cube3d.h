@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/17 23:24:03 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:59:27 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ t_config        *ft_init_config(void);
 void            initPlayer(t_player *player, t_map *map);
 t_map           init_map(void);
 void			load_textures(t_env *env);
+void 			init_keys(t_keys *keys);
 
 /* Prototype de parsing.c*/
 

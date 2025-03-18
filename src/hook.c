@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:04:24 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/17 23:22:45 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:54:11 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,18 @@ void	handle_hook(t_env *env)
 
 int key_press(int keycode, t_env *env)
 {
-    if (keycode == 13 || keycode == 119) // W ou flèche haut
+	printf("keycode: %d\n", keycode);
+    if (keycode == 13 || keycode == 65362) // W ou flèche haut
         env->keys.up = 1;
-    else if (keycode == 1 || keycode == 115) // S ou flèche bas
+    else if (keycode == 1 || keycode == 65364) // S ou flèche bas
         env->keys.down = 1;
     else if (keycode == 0 || keycode == 97) // A (pour strafer à gauche)
         env->keys.strafe_left = 1;
     else if (keycode == 2 || keycode == 100) // D (pour strafer à droite)
         env->keys.strafe_right = 1;
-    else if (keycode == 123 || keycode == 65361) // Flèche gauche (pour tourner)
+    else if (keycode == 123 || keycode == 65363) // Flèche gauche (pour tourner)
         env->keys.left = 1;
-    else if (keycode == 124 || keycode == 65363) // Flèche droite (pour tourner)
+    else if (keycode == 124 || keycode == 65361) // Flèche droite (pour tourner)
         env->keys.right = 1;
     else if (keycode == 53 || keycode == 65307) // Esc
         close_window(env);
@@ -76,17 +77,17 @@ int key_press(int keycode, t_env *env)
 
 int key_release(int keycode, t_env *env)
 {
-    if (keycode == 13 || keycode == 119)
+    if (keycode == 13 || keycode == 65362)
         env->keys.up = 0;
-    else if (keycode == 1 || keycode == 115)
+    else if (keycode == 1 || keycode == 65364)
         env->keys.down = 0;
     else if (keycode == 0 || keycode == 97)
         env->keys.strafe_left = 0;
     else if (keycode == 2 || keycode == 100)
         env->keys.strafe_right = 0;
-    else if (keycode == 123 || keycode == 65361)
+    else if (keycode == 123 || keycode == 65363)
         env->keys.left = 0;
-    else if (keycode == 124 || keycode == 65363)
+    else if (keycode == 124 || keycode == 65361)
         env->keys.right = 0;
     else if (keycode == 49 || keycode == 32)
         env->keys.action = 0;
