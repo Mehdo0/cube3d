@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/18 14:59:27 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/03/18 21:49:26 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_img
     void	*wall_W;
     void	*wall_S;
     void	*wall_E;
-    void    *collectible;
     void    *door;
 }				t_img;
 
@@ -110,12 +109,14 @@ t_config        *ft_init_config(void);
 void            initPlayer(t_player *player, t_map *map);
 t_map           init_map(void);
 void			load_textures(t_env *env);
+void            create_color_textures(t_env *env);
 void 			init_keys(t_keys *keys);
 
 /* Prototype de parsing.c*/
 
 t_config	    *ft_init_and_parse_map(const char *filename);
 void	        ft_free_config(t_config *config);
+int	            init_img_textures(t_env *env);
 
 /* Prototype de utils.c */
 

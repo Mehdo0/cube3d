@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:19:01 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/18 14:59:18 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/03/18 21:54:30 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,21 @@ int main(int ac, char **av)
     
     if (ac != 2)
         ft_map_error("Error\nInvalid number of arguments\n");
-    
-    // Initialize MLX and window
     env.mlx = mlx_init();
     env.win = mlx_new_window(env.mlx, screenWidth, screenHeight, "Cube3D");
     
-    printf("DEBUG: About to parse map: %s\n", av[1]);
     // Initialize config and parse map
     env.config = ft_init_and_parse_map(av[1]);
-    printf("DEBUG: Map parsing complete\n");
     
-	init_keys(&env.keys);
-
-    // Remove the duplicate line
+    init_keys(&env.keys);
+    
+    // Chargement des textures après l'initialisation de la configuration
     load_textures(&env);
     
     // Configurer les hooks pour les événements
-    mlx_hook(env.win, 2, 1L<<0, key_press, &env);   // Touche pressée
-    mlx_hook(env.win, 3, 1L<<1, key_release, &env); // Touche relâchée
-    mlx_hook(env.win, 17, 0, close_window, &env);   // Fermeture de fenêtre
+    mlx_hook(env.win, 2, 1L<<0, key_press, &env);
+    mlx_hook(env.win, 3, 1L<<1, key_release, &env);
+    mlx_hook(env.win, 17, 0, close_window, &env);
     
     // Configurer la fonction de rendu
     mlx_loop_hook(env.mlx, render_frame, &env);

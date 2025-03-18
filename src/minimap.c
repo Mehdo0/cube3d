@@ -6,22 +6,24 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:20:36 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 23:24:47 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/18 21:19:25 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
 
-void draw_background(t_env *env, int start_x, int start_y, int size)
+// On modifie draw_background pour qu'elle prenne en paramètres
+// la largeur et la hauteur en pixels de la zone à remplir.
+void draw_background(t_env *env, int start_x, int start_y, int width, int height)
 {
     int x;
     int y;
     
     y = 0;
-    while (y < size)
+    while (y < height)
     {
         x = 0;
-        while (x < size)
+        while (x < width)
         {
             char *dst = env->addr + ((start_y + y) * env->line_length + 
                         (start_x + x) * (env->bits_per_pixel / 8));
@@ -53,7 +55,7 @@ void draw_walls(t_env *env, int start_x, int start_y, int tile_size)
                 else if (env->config->map.grid[y][x] == '0')
                     color = 0x444444;  // Espaces en gris
                 else
-                    color = 0x0000FF;  // Autre en bleu (portes, etc.)
+                    color = 0x0000FF;  // Autre (ex. portes) en bleu
                 
                 int ty = 0;
                 while (ty < tile_size)
@@ -89,7 +91,7 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
     int i;
     float angle;
     
-    // Dessiner un cercle rouge pour la position du joueur
+    // Dessiner un petit cercle rouge pour la position du joueur
     for (int ty = -2; ty <= 2; ty++) {
         for (int tx = -2; tx <= 2; tx++) {
             if (tx*tx + ty*ty <= 4) {  // Cercle de rayon 2
@@ -106,11 +108,11 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
         }
     }
     
-    // Dessiner une flèche pour indiquer la direction
+    // Dessiner une flèche indiquant la direction
     dir_x = player_x + player->dirX * size;
     dir_y = player_y + player->dirY * size;
     
-    // Ligne centrale
+    // Ligne centrale de la flèche
     i = 0;
     while (i < size)
     {
@@ -126,7 +128,7 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
         i++;
     }
     
-    // Pointe de la flèche (triangle)
+    // Dessiner la pointe de la flèche (triangle)
     angle = atan2(player->dirY, player->dirX);
     for (int a = -2; a <= 2; a++)
     {
@@ -145,19 +147,27 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
 
 void draw_minimap(t_env *env)
 {
-    int minimap_size = 150;
-    int tile_size = 5;
-    int start_x = screenWidth - minimap_size - 10;
-    int start_y = 10;
+    // Fixer la taille d'une tuile en pixels
+    int tile_size = 10;
+    // La largeur et la hauteur de la minimap dépendent de la taille de la carte
+    int map_width = env->config->map.width;
+    int map_height = env->config->map.height;
+    int minimap_width = map_width * tile_size;
+    int minimap_height = map_height * tile_size;
+    
+    // Position de la minimap dans l'écran (par exemple, en haut à droite)
+    int start_x = screenWidth - minimap_width - 10;
+    int start_y = 20;
+    
     t_player *player = &env->config->player;
     
-    // Dessiner le fond de la minimap
-    draw_background(env, start_x, start_y, minimap_size);
+    // Dessiner le fond de la minimap (la zone a exactement la taille de la map en pixels)
+    draw_background(env, start_x, start_y, minimap_width, minimap_height);
     
-    // Dessiner les murs et espaces vides
+    // Dessiner les murs et espaces vides en fonction de la map
     draw_walls(env, start_x, start_y, tile_size);
     
-    // Dessiner la position et direction du joueur
+    // Dessiner la position et la direction du joueur
     int player_x = start_x + (int)(player->posX * tile_size);
     int player_y = start_y + (int)(player->posY * tile_size);
     
@@ -167,30 +177,30 @@ void draw_minimap(t_env *env)
     int border_color = 0xFFFFFF;
     
     // Ligne horizontale supérieure
-    for (int x = start_x - 1; x <= start_x + minimap_size; x++) {
-        char *dst = env->addr + ((start_y - 1) * env->line_length + 
+    for (int x = start_x - 1; x <= start_x + minimap_width; x++) {
+        char *dst = env->addr + ((start_y - 1) * env->line_length +
                     x * (env->bits_per_pixel / 8));
         *(unsigned int*)dst = border_color;
     }
     
     // Ligne horizontale inférieure
-    for (int x = start_x - 1; x <= start_x + minimap_size; x++) {
-        char *dst = env->addr + ((start_y + minimap_size) * env->line_length + 
+    for (int x = start_x - 1; x <= start_x + minimap_width; x++) {
+        char *dst = env->addr + ((start_y + minimap_height) * env->line_length +
                     x * (env->bits_per_pixel / 8));
         *(unsigned int*)dst = border_color;
     }
     
     // Ligne verticale gauche
-    for (int y = start_y - 1; y <= start_y + minimap_size; y++) {
-        char *dst = env->addr + (y * env->line_length + 
+    for (int y = start_y - 1; y <= start_y + minimap_height; y++) {
+        char *dst = env->addr + (y * env->line_length +
                     (start_x - 1) * (env->bits_per_pixel / 8));
         *(unsigned int*)dst = border_color;
     }
     
     // Ligne verticale droite
-    for (int y = start_y - 1; y <= start_y + minimap_size; y++) {
-        char *dst = env->addr + (y * env->line_length + 
-                    (start_x + minimap_size) * (env->bits_per_pixel / 8));
+    for (int y = start_y - 1; y <= start_y + minimap_height; y++) {
+        char *dst = env->addr + (y * env->line_length +
+                    (start_x + minimap_width) * (env->bits_per_pixel / 8));
         *(unsigned int*)dst = border_color;
     }
 }

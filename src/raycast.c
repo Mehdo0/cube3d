@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:02:32 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 23:23:45 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/18 22:47:12 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void castRays(t_env *env)
         int mapY = (int)player->posY;
         
         // Longueur du rayon de la position actuelle à la prochaine ligne x ou y
-        float deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-        float deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
+        float deltaDistX = (fabs(rayDirX) < 0.001) ? 1e30 : fabs(1 / rayDirX);
+        float deltaDistY = (fabs(rayDirY) < 0.001) ? 1e30 : fabs(1 / rayDirY);
         
         // Direction des pas et distance initiale aux bords
         int stepX, stepY;
@@ -75,14 +75,15 @@ void castRays(t_env *env)
             }
         }
         
-        // Calculer la distance perpendiculaire (évite l'effet fish-eye)
+        // Calculate the perpendicular wall distance to avoid fisheye effect
         float perpWallDist;
         if (side == 0)
             perpWallDist = (mapX - player->posX + (1 - stepX) / 2) / rayDirX;
         else
             perpWallDist = (mapY - player->posY + (1 - stepY) / 2) / rayDirY;
-        
-        // Calculer la hauteur de la ligne à dessiner
+
+        // Apply minimum value to avoid division by zero
+        perpWallDist = fmax(0.001f, perpWallDist);
         int lineHeight = (int)(screenHeight / perpWallDist);
         
         // Calculer le pixel de début et de fin
@@ -111,11 +112,12 @@ void castRays(t_env *env)
             wallX = player->posY + perpWallDist * rayDirY;
         else
             wallX = player->posX + perpWallDist * rayDirX;
-        wallX -= floor(wallX);
+        wallX = wallX - floor(wallX);  // Garantit que wallX est entre 0 et 1
 
         int texX = (int)(wallX * texWidth);
         if ((side == 0 && rayDirX > 0) || (side == 1 && rayDirY < 0))
             texX = texWidth - texX - 1;
+        texX = (texX < 0) ? 0 : (texX >= texWidth) ? texWidth - 1 : texX;
         
         // Dessiner la colonne texturée
         drawTexturedLine(env, x, drawStart, drawEnd, texture, texX);
@@ -242,23 +244,37 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
 
 void drawTexturedLine(t_env *env, int x, int drawStart, int drawEnd, void *texture, int texX) {
     int lineHeight = drawEnd - drawStart;
+    if (lineHeight <= 0) return;  // Safety check
     
+    int bpp, size_line, endian;
     char *texData;
-    int texBpp, texLineLength, texEndian;
     
-    // Obtenir les données de la texture
-    texData = mlx_get_data_addr(texture, &texBpp, &texLineLength, &texEndian);
+    // Get texture data
+    texData = mlx_get_data_addr(texture, &bpp, &size_line, &endian);
+    if (!texData) return;  // Safety check if texture data is unavailable
     
-    // Dessiner la ligne verticale
+    // Calculate step for texture coordinates
+    double step = (double)texHeight / lineHeight;
+    double texPos = 0.0;
+    
+    // Draw the vertical line
     for (int y = drawStart; y < drawEnd; y++) {
-        int texY = (y - drawStart) * texHeight / lineHeight;
+        int texY = (int)texPos & (texHeight - 1);  // Ceci est bon car c'est un masque
+        texPos += step;
         
-        // Calculer la couleur
-        char *texPixel = texData + (texY * texLineLength + texX * (texBpp / 8));
-        int color = *(unsigned int*)texPixel;
+        if (texX < 0 || texX >= texWidth || texY < 0 || texY >= texHeight)
+            continue;
         
-        // Dessiner le pixel
-        char *dst = env->addr + (y * env->line_length + x * (env->bits_per_pixel / 8));
-        *(unsigned int*)dst = color;
+        // Calculate color from texture
+        unsigned int color;
+        char *src = texData + (texY * size_line + texX * (bpp / 8));
+        color = *(unsigned int*)src;
+        
+        // Safety check for screen bounds
+        if (y >= 0 && y < screenHeight && x >= 0 && x < screenWidth) {
+            // Put pixel in image
+            char *dst = env->addr + (y * env->line_length + x * (env->bits_per_pixel / 8));
+            *(unsigned int*)dst = color;
+        }
     }
 }
