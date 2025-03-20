@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/18 21:49:26 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:07:21 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,9 @@ int             fps_counter(t_env *env);
 void            castRays(t_env *env);
 void 			movePlayer(t_env *env, float moveSpeed, float rotSpeed);
 void 			drawVerticalLine(t_env *env, int x, int drawStart, int drawEnd, int color);
-void 			drawTexturedLine(t_env *env, int x, int drawStart, int drawEnd, void *texture, int texX);
+void            drawTexturedLine(t_env *env,
+                      int x, int drawStart, int drawEnd,
+                      void *texture, int texX, int lineHeight);
 
 /* prototype de minimap.c */
 
