@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/20 16:07:21 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/03/24 16:11:13 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ void 			init_keys(t_keys *keys);
 t_config	    *ft_init_and_parse_map(const char *filename);
 void	        ft_free_config(t_config *config);
 int	            init_img_textures(t_env *env);
+void	        ft_check_borders(t_config *config);
 
 /* Prototype de utils.c */
 

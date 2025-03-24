@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:07:22 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 23:20:43 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/24 22:00:28 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int    fps_counter(t_env *env)
 int render_frame(t_env *env)
 {
     // Déplacer le joueur
-    float moveSpeed = 0.05;
-    float rotSpeed = 0.03;
+    float moveSpeed = 0.04;
+    float rotSpeed = 0.04;
     movePlayer(env, moveSpeed, rotSpeed);
     
     // Créer une nouvelle image à chaque frame

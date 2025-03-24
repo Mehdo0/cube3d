@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:42:54 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/18 22:05:32 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/24 21:23:21 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,37 @@ static int	ft_parse_color(const char *str, int color[3])
 	char	*tmp;
 	char	*token;
 	int		i;
+	int		value;
 
 	tmp = ft_strdup(str);
 	if (!tmp)
 		ft_map_error("Error\nMemory allocation failed\n");
+
 	i = 0;
 	token = ft_strtok(tmp, ",");
-	while (token && i < 3)
+	while (token)
 	{
-		color[i] = ft_atoi(token);
-		i++;
+		if (i >= 3) // Trop de valeurs
+		{
+			free(tmp);
+			return (-1);
+		}
+		value = ft_atoi(token);
+		if (value < 0 || value > 255) // Valeur invalide
+		{
+			free(tmp);
+			return (-1);
+		}
+		color[i++] = value;
 		token = ft_strtok(NULL, ",");
 	}
 	free(tmp);
-	if (i != 3)
+	if (i != 3) // Pas assez de valeurs
 		return (-1);
+
 	return (0);
 }
+
 
 static void	ft_parse_config_line(t_config *config, char *line)
 {
@@ -111,7 +125,6 @@ static void	ft_parse_file(const char *filename, t_config *config)
     char line[MAX_LINE];
     int map_started = 0;
     
-    printf("DEBUG: Opening file: %s\n", filename);
     fp = fopen(filename, "r");
     if (!fp)
         ft_map_error("Error\nUnable to open file\n");
@@ -158,6 +171,12 @@ t_config	*ft_init_and_parse_map(const char *filename)
 
 	config = ft_init_config();
 	ft_parse_file(filename, config);
+	ft_check_borders(config);
 	initPlayer(&config->player, &config->map);
+	if (config->floor[0] < 0 || config->floor[1] < 0 || config->floor[2] < 0 ||
+		config->ceiling[0] < 0 || config->ceiling[1] < 0 || config->ceiling[2] < 0
+		|| !config->no || !config->so || !config->we || !config->ea
+		|| config->map.height == 0)
+		ft_map_error("Error\nInvalid color format\n");
 	return (config);
 }

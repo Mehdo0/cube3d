@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:01:50 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/17 23:30:11 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:27:20 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 void ft_map_error(char *error_msg)
 {
     printf("%s", error_msg);
-    // Print a stack trace or add debug info
-    printf("Error location: %s\n", __func__);
     exit(EXIT_FAILURE);
 }
 
