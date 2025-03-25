@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/24 16:11:13 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/25 16:47:37 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_map
 
 typedef struct s_img
 {
+    void    *hud_img;
 	void	*wall_N;
     void	*wall_W;
     void	*wall_S;
@@ -93,6 +94,7 @@ typedef struct s_env
     int bits_per_pixel;
     int line_length;
     int endian;
+    
 	t_img *img_textures;
 } t_env;
 

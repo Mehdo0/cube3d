@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:56:24 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/24 22:12:34 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/25 16:47:27 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,10 @@ int	init_img_textures(t_env *env)
 	env->img_textures->wall_S = mlx_xpm_file_to_image(env->mlx, env->config->so, &width, &height);
 	env->img_textures->wall_E = mlx_xpm_file_to_image(env->mlx, env->config->ea, &width, &height);
 	env->img_textures->wall_W = mlx_xpm_file_to_image(env->mlx, env->config->we, &width, &height);
+	env->img_textures->hud_img = mlx_xpm_file_to_image(env->mlx, "textures/HUD.xpm", &width, &height);
 	if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
-		!env->img_textures->wall_E || !env->img_textures->wall_W)
+		!env->img_textures->wall_E || !env->img_textures->wall_W
+		|| !env->img_textures->hud_img)
 	{
 		if (env->img_textures->wall_N)
 			mlx_destroy_image(env->mlx, env->img_textures->wall_N);
@@ -154,6 +156,8 @@ int	init_img_textures(t_env *env)
 			mlx_destroy_image(env->mlx, env->img_textures->wall_E);
 		if (env->img_textures->wall_W)
 			mlx_destroy_image(env->mlx, env->img_textures->wall_W);
+		if (env->img_textures->hud_img)
+			mlx_destroy_image(env->mlx, env->img_textures->hud_img);
 		return (-1);
 	}
 	return (0);

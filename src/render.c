@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:07:22 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/24 22:00:28 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/25 16:48:10 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,34 +80,44 @@ int    fps_counter(t_env *env)
     return (fps);
 }
 
+
 int render_frame(t_env *env)
 {
-    // Déplacer le joueur
+    // 1) Déplacer le joueur
     float moveSpeed = 0.04;
     float rotSpeed = 0.04;
     movePlayer(env, moveSpeed, rotSpeed);
     
-    // Créer une nouvelle image à chaque frame
+    // 2) Créer une nouvelle image (frame) et récupérer son buffer
     env->img = mlx_new_image(env->mlx, screenWidth, screenHeight);
     env->addr = mlx_get_data_addr(env->img, &env->bits_per_pixel, &env->line_length, &env->endian);
     
-    // Dessiner le plafond et le sol
+    // 3) Dessiner le plafond et le sol
     render_ceiling_floor(env);
     
-    // Lancer les rayons
+    // 4) Lancer les rayons (walls, textures, etc.)
     castRays(env);
     
-    // Dessiner la minimap - NOUVEAU
+    // 5) Dessiner la minimap
     draw_minimap(env);
     
-    // Afficher l'image
+    // 6) Afficher l'image de la frame dans la fenêtre
     mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
     
-    // Afficher le compteur FPS
+    // 7) Afficher le HUD (toujours au-dessus)
+    if (env->img_textures->hud_img)
+    {
+        int hud_x = screenWidth - 150; 
+        int hud_y = 10;
+        mlx_put_image_to_window(env->mlx, env->win, env->img_textures->hud_img, hud_x, hud_y);
+    }
+
+    // 8) Afficher le compteur FPS (texte)
     fps_counter(env);
     
-    // Libérer l'image
+    // 9) Libérer l’image de la frame
     mlx_destroy_image(env->mlx, env->img);
+
     
     return (0);
 }

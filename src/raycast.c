@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:02:32 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/24 21:05:41 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/25 15:37:40 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void castRays(t_env *env)
             perpWallDist = (mapY - player->posY + (1 - stepY) / 2.0f) / rayDirY;
 
         // Calcul de la hauteur de colonne
-        int lineHeight = (int)(screenHeight / perpWallDist);
+        int lineHeight = (int)(screenHeight / perpWallDist + 10);
 
         // Position en haut et en bas sur l’écran (sans la clamping encore)
         int drawStart = -lineHeight / 2 + screenHeight / 2;

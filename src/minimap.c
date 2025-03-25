@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:20:36 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/18 21:19:25 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/25 16:22:39 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
     // Dessiner un petit cercle rouge pour la position du joueur
     for (int ty = -2; ty <= 2; ty++) {
         for (int tx = -2; tx <= 2; tx++) {
-            if (tx*tx + ty*ty <= 4) {  // Cercle de rayon 2
+            if (tx*tx + ty*ty <= 150) {  // Cercle de rayon 2
                 int draw_x = player_x + tx;
                 int draw_y = player_y + ty;
                 
@@ -102,7 +102,7 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
                     draw_y >= 0 && draw_y < screenHeight) {
                     char *dst = env->addr + (draw_y * env->line_length + 
                                 draw_x * (env->bits_per_pixel / 8));
-                    *(unsigned int*)dst = 0xFF0000;  // Rouge
+                    *(unsigned int*)dst = 0xFFFFFF;  // Blanc
                 }
             }
         }
@@ -123,25 +123,9 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
             draw_y >= 0 && draw_y < screenHeight) {
             char *dst = env->addr + (draw_y * env->line_length + 
                         draw_x * (env->bits_per_pixel / 8));
-            *(unsigned int*)dst = 0xFFFF00;  // Jaune
+            *(unsigned int*)dst = 0xFF0000;  // Rouge
         }
         i++;
-    }
-    
-    // Dessiner la pointe de la flèche (triangle)
-    angle = atan2(player->dirY, player->dirX);
-    for (int a = -2; a <= 2; a++)
-    {
-        float side_angle = angle + 3.14 / 4 * a / 2;
-        int side_x = player_x + (int)(size/2 * player->dirX + 2 * cos(side_angle));
-        int side_y = player_y + (int)(size/2 * player->dirY + 2 * sin(side_angle));
-        
-        if (side_x >= 0 && side_x < screenWidth && 
-            side_y >= 0 && side_y < screenHeight) {
-            char *dst = env->addr + (side_y * env->line_length + 
-                        side_x * (env->bits_per_pixel / 8));
-            *(unsigned int*)dst = 0xFFFF00;  // Jaune
-        }
     }
 }
 
@@ -156,8 +140,8 @@ void draw_minimap(t_env *env)
     int minimap_height = map_height * tile_size;
     
     // Position de la minimap dans l'écran (par exemple, en haut à droite)
-    int start_x = screenWidth - minimap_width - 10;
-    int start_y = 20;
+    int start_x = 50;
+    int start_y = screenHeight - minimap_height - 50;
     
     t_player *player = &env->config->player;
     
