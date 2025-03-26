@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:02:32 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/25 15:37:40 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/26 19:03:17 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,75 +168,92 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
 {
     t_player *player = &env->config->player;
     t_map *map = &env->config->map;
-    float collision_margin = 0.15;  // Ajustable pour éviter les collisions
+    // Ajustez cette marge selon la taille de votre joueur et les dimensions du mur
+    float collision_margin = 0.01f;
 
-    // Avancer
-    if (env->keys.up) {
+    // Avancer (Up)
+    if (env->keys.up)
+    {
         float newX = player->posX + player->dirX * moveSpeed;
         float newY = player->posY + player->dirY * moveSpeed;
 
-        // Vérification X, Y et diagonale pour éviter les collisions aux coins
+        // Mise à jour de X (ne teste pas newY)
         if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map) &&
-            isFree(newX, newY, map))
+            isFree(newX - collision_margin, player->posY, map))
+        {
             player->posX = newX;
+        }
+        // Mise à jour de Y (ne teste pas newX)
         if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map) &&
-            isFree(newX, newY, map))
+            isFree(player->posX, newY - collision_margin, map))
+        {
             player->posY = newY;
+        }
     }
 
-    // Reculer
-    if (env->keys.down) {
+    // Reculer (Down)
+    if (env->keys.down)
+    {
         float newX = player->posX - player->dirX * moveSpeed;
         float newY = player->posY - player->dirY * moveSpeed;
 
         if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map) &&
-            isFree(newX, newY, map))
+            isFree(newX - collision_margin, player->posY, map))
+        {
             player->posX = newX;
+        }
         if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map) &&
-            isFree(newX, newY, map))
+            isFree(player->posX, newY - collision_margin, map))
+        {
             player->posY = newY;
+        }
     }
 
-    // Déplacement latéral gauche
-    if (env->keys.strafe_left) {
+    // Strafe à gauche
+    if (env->keys.strafe_left)
+    {
+        // Vecteur perpendiculaire à la direction (tourné à gauche)
         float dirX_perp = -player->dirY;
-        float dirY_perp = player->dirX;
+        float dirY_perp =  player->dirX;
         float newX = player->posX + dirX_perp * moveSpeed;
         float newY = player->posY + dirY_perp * moveSpeed;
 
         if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map) &&
-            isFree(newX, newY, map))
+            isFree(newX - collision_margin, player->posY, map))
+        {
             player->posX = newX;
+        }
         if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map) &&
-            isFree(newX, newY, map))
+            isFree(player->posX, newY - collision_margin, map))
+        {
             player->posY = newY;
+        }
     }
 
-    // Déplacement latéral droit
-    if (env->keys.strafe_right) {
-        float dirX_perp = player->dirY;
+    // Strafe à droite
+    if (env->keys.strafe_right)
+    {
+        // Vecteur perpendiculaire à la direction (tourné à droite)
+        float dirX_perp =  player->dirY;
         float dirY_perp = -player->dirX;
         float newX = player->posX + dirX_perp * moveSpeed;
         float newY = player->posY + dirY_perp * moveSpeed;
 
         if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map) &&
-            isFree(newX, newY, map))
+            isFree(newX - collision_margin, player->posY, map))
+        {
             player->posX = newX;
+        }
         if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map) &&
-            isFree(newX, newY, map))
+            isFree(player->posX, newY - collision_margin, map))
+        {
             player->posY = newY;
+        }
     }
 
-    // Tourner à gauche
-    if (env->keys.left) {
+    // Rotation à gauche
+    if (env->keys.left)
+    {
         float oldDirX = player->dirX;
         player->dirX = player->dirX * cos(rotSpeed) - player->dirY * sin(rotSpeed);
         player->dirY = oldDirX * sin(rotSpeed) + player->dirY * cos(rotSpeed);
@@ -246,8 +263,9 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
         player->planeY = oldPlaneX * sin(rotSpeed) + player->planeY * cos(rotSpeed);
     }
 
-    // Tourner à droite
-    if (env->keys.right) {
+    // Rotation à droite
+    if (env->keys.right)
+    {
         float oldDirX = player->dirX;
         player->dirX = player->dirX * cos(-rotSpeed) - player->dirY * sin(-rotSpeed);
         player->dirY = oldDirX * sin(-rotSpeed) + player->dirY * cos(-rotSpeed);
@@ -257,8 +275,6 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
         player->planeY = oldPlaneX * sin(-rotSpeed) + player->planeY * cos(-rotSpeed);
     }
 }
-
-
 
 void drawTexturedLine(t_env *env,
                       int x, int drawStart, int drawEnd,
