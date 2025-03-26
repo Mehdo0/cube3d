@@ -6,13 +6,49 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:07:22 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/25 16:48:10 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:46:10 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
 
-void    render_ceiling_floor(t_env *env)
+/*
+** Fonction qui dessine le HUD avec transparence.
+** Les pixels dont la couleur est 0x000000 (noir) sont considérés transparents.
+*/
+void draw_image_with_transparency(t_env *env, void *img, int pos_x, int pos_y, int img_w, int img_h)
+{
+    int bpp;
+    int line_length;
+    int endian;
+    char *img_data;
+    int x, y;
+    int pixel;
+
+    img_data = mlx_get_data_addr(img, &bpp, &line_length, &endian);
+    for (y = 0; y < img_h; y++)
+    {
+        for (x = 0; x < img_w; x++)
+        {
+            pixel = *(int *)(img_data + y * line_length + x * (bpp / 8));
+            
+            // Vérifier si le pixel est noir (0x000000) -> Ne pas l'afficher
+            if ((pixel & 0xFFFFFF) != 0x000000) // On ignore l'alpha
+            {
+                int dest_x = pos_x + x;
+                int dest_y = pos_y + y;
+                if (dest_x >= 0 && dest_x < screenWidth && dest_y >= 0 && dest_y < screenHeight)
+                {
+                    char *dst = env->addr + (dest_y * env->line_length + dest_x * (env->bits_per_pixel / 8));
+                    *(unsigned int *)dst = pixel;
+                }
+            }
+        }
+    }
+}
+
+
+void render_ceiling_floor(t_env *env)
 {
     int x;
     int y;
@@ -54,13 +90,13 @@ void    render_ceiling_floor(t_env *env)
     }
 }
 
-int    fps_counter(t_env *env)
+int fps_counter(t_env *env)
 {
-    static int    prev_time = 0;
-    static int    frames = 0;
-    static int    fps = 0;
-    int            time;
-    char        fps_str[16];
+    static int prev_time = 0;
+    static int frames = 0;
+    static int fps = 0;
+    int time;
+    char fps_str[16];
 
     frames++;
     time = clock() / (CLOCKS_PER_SEC / 1000);  // Temps en millisecondes
@@ -80,7 +116,6 @@ int    fps_counter(t_env *env)
     return (fps);
 }
 
-
 int render_frame(t_env *env)
 {
     // 1) Déplacer le joueur
@@ -88,14 +123,14 @@ int render_frame(t_env *env)
     float rotSpeed = 0.04;
     movePlayer(env, moveSpeed, rotSpeed);
     
-    // 2) Créer une nouvelle image (frame) et récupérer son buffer
+    // 2) Créer la nouvelle image (frame) et récupérer son buffer
     env->img = mlx_new_image(env->mlx, screenWidth, screenHeight);
     env->addr = mlx_get_data_addr(env->img, &env->bits_per_pixel, &env->line_length, &env->endian);
     
     // 3) Dessiner le plafond et le sol
     render_ceiling_floor(env);
     
-    // 4) Lancer les rayons (walls, textures, etc.)
+    // 4) Lancer les rayons (mur, textures, etc.)
     castRays(env);
     
     // 5) Dessiner la minimap
@@ -104,12 +139,28 @@ int render_frame(t_env *env)
     // 6) Afficher l'image de la frame dans la fenêtre
     mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
     
-    // 7) Afficher le HUD (toujours au-dessus)
+    // 7) Afficher le HUD avec transparence (et non plus via mlx_put_image_to_window)
     if (env->img_textures->hud_img)
     {
-        int hud_x = screenWidth - 150; 
+        int hud_x = screenWidth - 170; 
         int hud_y = 10;
-        mlx_put_image_to_window(env->mlx, env->win, env->img_textures->hud_img, hud_x, hud_y);
+        draw_image_with_transparency(env,
+            env->img_textures->hud_img,
+            hud_x,
+            hud_y,
+            120,
+            68);
+    }
+    if (env->img_textures->rifle_img)
+    {
+        int rifle_x = screenWidth - 822; 
+        int rifle_y = screenHeight - 504;
+        draw_image_with_transparency(env,
+            env->img_textures->rifle_img,
+            rifle_x,
+            rifle_y,
+            822,
+            504);
     }
 
     // 8) Afficher le compteur FPS (texte)
@@ -117,7 +168,6 @@ int render_frame(t_env *env)
     
     // 9) Libérer l’image de la frame
     mlx_destroy_image(env->mlx, env->img);
-
     
     return (0);
 }

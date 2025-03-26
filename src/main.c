@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:19:01 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/18 21:54:30 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:50:53 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int main(int ac, char **av)
     // Configurer les hooks pour les événements
     mlx_hook(env.win, 2, 1L<<0, key_press, &env);
     mlx_hook(env.win, 3, 1L<<1, key_release, &env);
+    mlx_hook(env.win, 6, 1L<<6, mouse_move, &env);
     mlx_hook(env.win, 17, 0, close_window, &env);
     
     // Configurer la fonction de rendu

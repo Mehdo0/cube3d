@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/03/25 16:47:37 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:48:56 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_map
 typedef struct s_img
 {
     void    *hud_img;
+    void    *rifle_img;
 	void	*wall_N;
     void	*wall_W;
     void	*wall_S;
@@ -104,6 +105,7 @@ int 			key_press(int keycode, t_env *env);
 int 			key_release(int keycode, t_env *env);
 int 			close_window(t_env *env);
 int 			dites_oui_aux_hook(int key, t_env *env);
+int             mouse_move(int x, int y, t_env *env);
 
 /* Prototype de init.c */
 
