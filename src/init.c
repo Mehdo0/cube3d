@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:56:24 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/26 16:41:35 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:54:43 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,37 +134,44 @@ void	load_textures(t_env *env)
 
 int	init_img_textures(t_env *env)
 {
-	int	width;
-	int	height;
+    int width;
+    int height;
 
-	if (!env->config->no || !env->config->so || !env->config->ea || !env->config->we)
-		ft_map_error("Error\nMissing texture path in configuration\n");
-	env->img_textures->wall_N = mlx_xpm_file_to_image(env->mlx, env->config->no, &width, &height);
-	env->img_textures->wall_S = mlx_xpm_file_to_image(env->mlx, env->config->so, &width, &height);
-	env->img_textures->wall_E = mlx_xpm_file_to_image(env->mlx, env->config->ea, &width, &height);
-	env->img_textures->wall_W = mlx_xpm_file_to_image(env->mlx, env->config->we, &width, &height);
-	env->img_textures->hud_img = mlx_xpm_file_to_image(env->mlx, "textures/HUD.xpm", &width, &height);
-	env->img_textures->rifle_img = mlx_xpm_file_to_image(env->mlx, "textures/rifle.xpm", &width, &height);
-	if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
-		!env->img_textures->wall_E || !env->img_textures->wall_W
-		|| !env->img_textures->hud_img)
-	{
-		if (env->img_textures->wall_N)
-			mlx_destroy_image(env->mlx, env->img_textures->wall_N);
-		if (env->img_textures->wall_S)
-			mlx_destroy_image(env->mlx, env->img_textures->wall_S);
-		if (env->img_textures->wall_E)
-			mlx_destroy_image(env->mlx, env->img_textures->wall_E);
-		if (env->img_textures->wall_W)
-			mlx_destroy_image(env->mlx, env->img_textures->wall_W);
-		if (env->img_textures->hud_img)
-			mlx_destroy_image(env->mlx, env->img_textures->hud_img);
-		if (env->img_textures->rifle_img)
-			mlx_destroy_image(env->mlx, env->img_textures->rifle_img);
-		return (-1);
-	}
-	return (0);
+    // Vérification que tous les chemins de texture essentiels sont présents.
+    if (!env->config->no || !env->config->so || !env->config->ea ||
+        !env->config->we)
+        ft_map_error("Error\nMissing texture path in configuration\n");
+
+    // Charger les textures à partir des fichiers XPM
+    env->img_textures->wall_N = mlx_xpm_file_to_image(env->mlx, env->config->no, &width, &height);
+    env->img_textures->wall_S = mlx_xpm_file_to_image(env->mlx, env->config->so, &width, &height);
+    env->img_textures->wall_E = mlx_xpm_file_to_image(env->mlx, env->config->ea, &width, &height);
+    env->img_textures->wall_W = mlx_xpm_file_to_image(env->mlx, env->config->we, &width, &height);
+    env->img_textures->hud_img   = mlx_xpm_file_to_image(env->mlx, "textures/HUD.xpm", &width, &height);
+    env->img_textures->rifle_img = mlx_xpm_file_to_image(env->mlx, "textures/rifle.xpm", &width, &height);
+
+    // Vérifier que toutes les textures ont été chargées correctement.
+    if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
+        !env->img_textures->wall_E || !env->img_textures->wall_W ||
+        !env->img_textures->hud_img   || !env->img_textures->rifle_img)
+    {
+        if (env->img_textures->wall_N)
+            mlx_destroy_image(env->mlx, env->img_textures->wall_N);
+        if (env->img_textures->wall_S)
+            mlx_destroy_image(env->mlx, env->img_textures->wall_S);
+        if (env->img_textures->wall_E)
+            mlx_destroy_image(env->mlx, env->img_textures->wall_E);
+        if (env->img_textures->wall_W)
+            mlx_destroy_image(env->mlx, env->img_textures->wall_W);
+        if (env->img_textures->hud_img)
+            mlx_destroy_image(env->mlx, env->img_textures->hud_img);
+        if (env->img_textures->rifle_img)
+            mlx_destroy_image(env->mlx, env->img_textures->rifle_img);
+        return (-1);
+    }
+    return (0);
 }
+
 
 void	create_color_textures(t_env *env)
 {
