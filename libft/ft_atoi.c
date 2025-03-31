@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 21:57:20 by kgiraud           #+#    #+#             */
-/*   Updated: 2024/10/05 16:14:24 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/03/26 21:26:20 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	ft_atoi(const char *str)
 	int	nbr;
 	int	sign;
 
+	if (!str)
+		return (-1);
 	i = 0;
 	nbr = 0;
 	sign = 1;

@@ -6,34 +6,30 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:42:54 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/24 21:23:21 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/26 21:26:59 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
 
-static int	ft_parse_color(const char *str, int color[3])
+static int	parse_color_boucle(char *tmp, char *token, int i, int color[3])
 {
-	char	*tmp;
-	char	*token;
-	int		i;
-	int		value;
+	int	value;
 
-	tmp = ft_strdup(str);
-	if (!tmp)
-		ft_map_error("Error\nMemory allocation failed\n");
-
-	i = 0;
-	token = ft_strtok(tmp, ",");
 	while (token)
 	{
-		if (i >= 3) // Trop de valeurs
+		if (i >= 3)
+		{
+			free(tmp);
+			return (-1);
+		}
+		if (!ft_isdigit(token))
 		{
 			free(tmp);
 			return (-1);
 		}
 		value = ft_atoi(token);
-		if (value < 0 || value > 255) // Valeur invalide
+		if (value < 0 || value > 255)
 		{
 			free(tmp);
 			return (-1);
@@ -42,10 +38,30 @@ static int	ft_parse_color(const char *str, int color[3])
 		token = ft_strtok(NULL, ",");
 	}
 	free(tmp);
-	if (i != 3) // Pas assez de valeurs
+	if (i != 3)
 		return (-1);
-
 	return (0);
+}
+
+static int	ft_parse_color(const char *str, int color[3])
+{
+	char	*tmp;
+	char	*token;
+	int		i;
+
+	if (!str || !*str)
+		return (-1);
+	tmp = ft_strdup(str);
+	if (!tmp)
+		ft_map_error("Error\nMemory allocation failed\n");
+	i = 0;
+	token = ft_strtok(tmp, ",");
+	if (!token)
+	{
+		free(tmp);
+		return (-1);
+	}
+	return (parse_color_boucle(tmp, token, i, color));
 }
 
 
