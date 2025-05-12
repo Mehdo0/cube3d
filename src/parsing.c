@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:42:54 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/26 21:26:59 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:48:26 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@ static int	parse_color_boucle(char *tmp, char *token, int i, int color[3])
 	while (token)
 	{
 		if (i >= 3)
-		{
-			free(tmp);
-			return (-1);
-		}
-		if (!ft_isdigit(token))
 		{
 			free(tmp);
 			return (-1);
@@ -187,7 +182,6 @@ t_config	*ft_init_and_parse_map(const char *filename)
 
 	config = ft_init_config();
 	ft_parse_file(filename, config);
-	ft_check_borders(config);
 	initPlayer(&config->player, &config->map);
 	if (config->floor[0] < 0 || config->floor[1] < 0 || config->floor[2] < 0 ||
 		config->ceiling[0] < 0 || config->ceiling[1] < 0 || config->ceiling[2] < 0

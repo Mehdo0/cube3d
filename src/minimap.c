@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:20:36 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/25 16:22:39 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:33:56 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void draw_walls(t_env *env, int start_x, int start_y, int tile_size)
                         draw_x = start_x + x * tile_size + tx;
                         draw_y = start_y + y * tile_size + ty;
                         
-                        if (draw_x >= 0 && draw_x < screenWidth && 
-                            draw_y >= 0 && draw_y < screenHeight)
+                        if (draw_x >= 0 && draw_x < SCREENWIDTH && 
+                            draw_y >= 0 && draw_y < SCREENHEIGHT)
                         {
                             char *dst = env->addr + (draw_y * env->line_length + 
                                         draw_x * (env->bits_per_pixel / 8));
@@ -98,8 +98,8 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
                 int draw_x = player_x + tx;
                 int draw_y = player_y + ty;
                 
-                if (draw_x >= 0 && draw_x < screenWidth && 
-                    draw_y >= 0 && draw_y < screenHeight) {
+                if (draw_x >= 0 && draw_x < SCREENWIDTH && 
+                    draw_y >= 0 && draw_y < SCREENHEIGHT) {
                     char *dst = env->addr + (draw_y * env->line_length + 
                                 draw_x * (env->bits_per_pixel / 8));
                     *(unsigned int*)dst = 0xFFFFFF;  // Blanc
@@ -109,18 +109,18 @@ void draw_player_direction(t_env *env, int player_x, int player_y, int size)
     }
     
     // Dessiner une flèche indiquant la direction
-    dir_x = player_x + player->dirX * size;
-    dir_y = player_y + player->dirY * size;
+    dir_x = player_x + player->dirx * size;
+    dir_y = player_y + player->diry * size;
     
     // Ligne centrale de la flèche
     i = 0;
     while (i < size)
     {
-        int draw_x = player_x + (int)(i * player->dirX / 2);
-        int draw_y = player_y + (int)(i * player->dirY / 2);
+        int draw_x = player_x + (int)(i * player->dirx / 2);
+        int draw_y = player_y + (int)(i * player->diry / 2);
         
-        if (draw_x >= 0 && draw_x < screenWidth && 
-            draw_y >= 0 && draw_y < screenHeight) {
+        if (draw_x >= 0 && draw_x < SCREENWIDTH && 
+            draw_y >= 0 && draw_y < SCREENHEIGHT) {
             char *dst = env->addr + (draw_y * env->line_length + 
                         draw_x * (env->bits_per_pixel / 8));
             *(unsigned int*)dst = 0xFF0000;  // Rouge
@@ -141,7 +141,7 @@ void draw_minimap(t_env *env)
     
     // Position de la minimap dans l'écran (par exemple, en haut à droite)
     int start_x = 50;
-    int start_y = screenHeight - minimap_height - 50;
+    int start_y = SCREENHEIGHT - minimap_height - 50;
     
     t_player *player = &env->config->player;
     
@@ -152,8 +152,8 @@ void draw_minimap(t_env *env)
     draw_walls(env, start_x, start_y, tile_size);
     
     // Dessiner la position et la direction du joueur
-    int player_x = start_x + (int)(player->posX * tile_size);
-    int player_y = start_y + (int)(player->posY * tile_size);
+    int player_x = start_x + (int)(player->posx * tile_size);
+    int player_y = start_y + (int)(player->posy * tile_size);
     
     draw_player_direction(env, player_x, player_y, tile_size * 2);
     

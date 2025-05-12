@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:56:24 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/26 16:54:43 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:33:24 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,17 @@ static void	setPlayerDirection1(t_player *player, char direction)
 {
 	if (direction == 'N')
 	{
-		player->dirX = 0;
-		player->dirY = -1;
-		player->planeX = 0.66;
-		player->planeY = 0;
+		player->dirx = 0;
+		player->diry = -1;
+		player->planex = 0.66;
+		player->planey = 0;
 	}
 	if (direction == 'S')
 	{
-		player->dirX = 0;
-		player->dirY = 1;
-		player->planeX = -0.66;
-		player->planeY = 0;
+		player->dirx = 0;
+		player->diry = 1;
+		player->planex = -0.66;
+		player->planey = 0;
 	}
 }
 
@@ -76,17 +76,17 @@ static void	setPlayerDirection2(t_player *player, char direction)
 {
 	if (direction == 'W')
 	{
-		player->dirX = -1;
-		player->dirY = 0;
-		player->planeX = 0;
-		player->planeY = -0.66;
+		player->dirx = -1;
+		player->diry = 0;
+		player->planex = 0;
+		player->planey = -0.66;
 	}
 	if (direction == 'E')
 	{
-		player->dirX = 1;
-		player->dirY = 0;
-		player->planeX = 0;
-		player->planeY = 0.66;
+		player->dirx = 1;
+		player->diry = 0;
+		player->planex = 0;
+		player->planey = 0.66;
 	}
 }
 
@@ -98,9 +98,9 @@ void	initPlayer(t_player *player, t_map *map)
 
 	direction = findPlayerPosition(map, &x, &y);
 	if (!direction)
-		return;
-	player->posX = x + 0.5;
-	player->posY = y + 0.5;
+		return ;
+	player->posx = x + 0.5;
+	player->posy = y + 0.5;
 	map->grid[y][x] = '0';
 	setPlayerDirection1(player, direction);
 	setPlayerDirection2(player, direction);
@@ -127,49 +127,55 @@ void	load_textures(t_env *env)
 		("Failed to load textures from files, using color textures instead\n");
 		create_color_textures(env);
 	}
-	if (!env->img_textures->wall_N || !env->img_textures->wall_S ||
-		!env->img_textures->wall_E || !env->img_textures->wall_W)
+	if (!env->img_textures->wall_n || !env->img_textures->wall_s ||
+		!env->img_textures->wall_e || !env->img_textures->wall_w)
 		ft_map_error("Error\nFailed to create textures\n");
 }
 
 int	init_img_textures(t_env *env)
 {
-    int width;
-    int height;
+	int width;
+	int height;
 
-    // Vérification que tous les chemins de texture essentiels sont présents.
-    if (!env->config->no || !env->config->so || !env->config->ea ||
-        !env->config->we)
-        ft_map_error("Error\nMissing texture path in configuration\n");
+	// Vérification que tous les chemins de texture essentiels sont présents.
+	if (!env->config->no || !env->config->so || !env->config->ea ||
+		!env->config->we)
+		ft_map_error("Error\nMissing texture path in configuration\n");
 
-    // Charger les textures à partir des fichiers XPM
-    env->img_textures->wall_N = mlx_xpm_file_to_image(env->mlx, env->config->no, &width, &height);
-    env->img_textures->wall_S = mlx_xpm_file_to_image(env->mlx, env->config->so, &width, &height);
-    env->img_textures->wall_E = mlx_xpm_file_to_image(env->mlx, env->config->ea, &width, &height);
-    env->img_textures->wall_W = mlx_xpm_file_to_image(env->mlx, env->config->we, &width, &height);
-    env->img_textures->hud_img   = mlx_xpm_file_to_image(env->mlx, "textures/HUD.xpm", &width, &height);
-    env->img_textures->rifle_img = mlx_xpm_file_to_image(env->mlx, "textures/rifle.xpm", &width, &height);
+	// Charger les textures à partir des fichiers XPM
+	env->img_textures->wall_n = mlx_xpm_file_to_image(env->mlx, env->config->no, &width, &height);
+	env->img_textures->wall_s = mlx_xpm_file_to_image(env->mlx, env->config->so, &width, &height);
+	env->img_textures->wall_e = mlx_xpm_file_to_image(env->mlx, env->config->ea, &width, &height);
+	env->img_textures->wall_w = mlx_xpm_file_to_image(env->mlx, env->config->we, &width, &height);
+	env->img_textures->hud_img   = mlx_xpm_file_to_image(env->mlx, "textures/HUD.xpm", &width, &height);
+	env->img_textures->rifle_img = mlx_xpm_file_to_image(env->mlx, "textures/rifle.xpm", &width, &height);
 
-    // Vérifier que toutes les textures ont été chargées correctement.
-    if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
-        !env->img_textures->wall_E || !env->img_textures->wall_W ||
-        !env->img_textures->hud_img   || !env->img_textures->rifle_img)
-    {
-        if (env->img_textures->wall_N)
-            mlx_destroy_image(env->mlx, env->img_textures->wall_N);
-        if (env->img_textures->wall_S)
-            mlx_destroy_image(env->mlx, env->img_textures->wall_S);
-        if (env->img_textures->wall_E)
-            mlx_destroy_image(env->mlx, env->img_textures->wall_E);
-        if (env->img_textures->wall_W)
-            mlx_destroy_image(env->mlx, env->img_textures->wall_W);
-        if (env->img_textures->hud_img)
-            mlx_destroy_image(env->mlx, env->img_textures->hud_img);
-        if (env->img_textures->rifle_img)
-            mlx_destroy_image(env->mlx, env->img_textures->rifle_img);
-        return (-1);
-    }
-    return (0);
+	// Vérifier que toutes les textures ont été chargées correctement.
+	if (!env->img_textures->wall_n || !env->img_textures->wall_s || 
+		!env->img_textures->wall_e || !env->img_textures->wall_w ||
+		!env->img_textures->hud_img   || !env->img_textures->rifle_img)
+	{
+		if (env->img_textures->wall_n)
+			mlx_destroy_image(env->mlx, env->img_textures->wall_n);
+		if (env->img_textures->wall_s)
+			mlx_destroy_image(env->mlx, env->img_textures->wall_s);
+		if (env->img_textures->wall_e)
+			mlx_destroy_image(env->mlx, env->img_textures->wall_e);
+		if (env->img_textures->wall_w)
+			mlx_destroy_image(env->mlx, env->img_textures->wall_w);
+		if (env->img_textures->hud_img)
+			mlx_destroy_image(env->mlx, env->img_textures->hud_img);
+		if (env->img_textures->rifle_img)
+			mlx_destroy_image(env->mlx, env->img_textures->rifle_img);
+		env->img_textures->wall_n = NULL;
+		env->img_textures->wall_s = NULL;
+		env->img_textures->wall_w = NULL;
+		env->img_textures->wall_e = NULL;
+		env->img_textures->rifle_img = NULL;
+		env->img_textures->hud_img = NULL;
+		return (-1);
+	}
+	return (0);
 }
 
 
@@ -192,20 +198,20 @@ void	create_color_textures(t_env *env)
 	color_S = 0x00FF00;
 	color_E = 0x0000FF;
 	color_W = 0xFFFF00;
-	env->img_textures->wall_N = mlx_new_image(env->mlx, width, height);
-	env->img_textures->wall_S = mlx_new_image(env->mlx, width, height);
-	env->img_textures->wall_E = mlx_new_image(env->mlx, width, height);
-	env->img_textures->wall_W = mlx_new_image(env->mlx, width, height);
-	if (!env->img_textures->wall_N || !env->img_textures->wall_S || 
-		!env->img_textures->wall_E || !env->img_textures->wall_W)
+	env->img_textures->wall_n = mlx_new_image(env->mlx, width, height);
+	env->img_textures->wall_s = mlx_new_image(env->mlx, width, height);
+	env->img_textures->wall_e = mlx_new_image(env->mlx, width, height);
+	env->img_textures->wall_w = mlx_new_image(env->mlx, width, height);
+	if (!env->img_textures->wall_n || !env->img_textures->wall_s || 
+		!env->img_textures->wall_e || !env->img_textures->wall_w)
 		ft_map_error("Error\nFailed to create color textures\n");
-	data = (int *)mlx_get_data_addr(env->img_textures->wall_N, &bpp, &size_line, &endian);
+	data = (int *)mlx_get_data_addr(env->img_textures->wall_n, &bpp, &size_line, &endian);
 	ft_memset(data, color_N, width * height * sizeof(int));
-	data = (int *)mlx_get_data_addr(env->img_textures->wall_S, &bpp, &size_line, &endian);
+	data = (int *)mlx_get_data_addr(env->img_textures->wall_s, &bpp, &size_line, &endian);
 	ft_memset(data, color_S, width * height * sizeof(int));
-	data = (int *)mlx_get_data_addr(env->img_textures->wall_E, &bpp, &size_line, &endian);
+	data = (int *)mlx_get_data_addr(env->img_textures->wall_e, &bpp, &size_line, &endian);
 	ft_memset(data, color_E, width * height * sizeof(int));
-	data = (int *)mlx_get_data_addr(env->img_textures->wall_W, &bpp, &size_line, &endian);
+	data = (int *)mlx_get_data_addr(env->img_textures->wall_w, &bpp, &size_line, &endian);
 	ft_memset(data, color_W, width * height * sizeof(int));
 }
 

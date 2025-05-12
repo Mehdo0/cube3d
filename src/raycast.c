@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:02:32 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/26 19:03:17 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/05/05 14:50:59 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,45 +17,45 @@ void castRays(t_env *env)
     t_player *player = &env->config->player;
     t_map    *map    = &env->config->map;
 
-    for (int x = 0; x < screenWidth; x++)
+    for (int x = 0; x < SCREENWIDTH; x++)
     {
         // Position "cameraX" sur le plan : de -1 (gauche) à +1 (droite)
-        float cameraX = 2.0f * x / (float)screenWidth - 1.0f;
+        float cameraX = 2.0f * x / (float)SCREENWIDTH - 1.0f;
 
         // Direction du rayon
-        float rayDirX = player->dirX   + player->planeX * cameraX;
-        float rayDirY = player->dirY   + player->planeY * cameraX;
+        float rayDirx = player->dirx   + player->planex * cameraX;
+        float rayDiry = player->diry   + player->planey * cameraX;
 
         // Case map courante (en int)
-        int mapX = (int)(player->posX);
-        int mapY = (int)(player->posY);
+        int mapX = (int)(player->posx);
+        int mapY = (int)(player->posy);
 
         // Distances pour avancer «case par case» (DDA)
-        float deltaDistX = (fabs(rayDirX) < 1e-8) ? 1e30 : fabs(1.0f / rayDirX);
-        float deltaDistY = (fabs(rayDirY) < 1e-8) ? 1e30 : fabs(1.0f / rayDirY);
+        float deltaDistX = (fabs(rayDirx) < 1e-8) ? 1e30 : fabs(1.0f / rayDirx);
+        float deltaDistY = (fabs(rayDiry) < 1e-8) ? 1e30 : fabs(1.0f / rayDiry);
 
         // Calcul sideDistX / sideDistY + stepX / stepY
         int stepX, stepY;
         float sideDistX, sideDistY;
-        if (rayDirX < 0)
+        if (rayDirx < 0)
         {
             stepX     = -1;
-            sideDistX = (player->posX - mapX) * deltaDistX;
+            sideDistX = (player->posx - mapX) * deltaDistX;
         }
         else
         {
             stepX     = 1;
-            sideDistX = (mapX + 1.0f - player->posX) * deltaDistX;
+            sideDistX = (mapX + 1.0f - player->posx) * deltaDistX;
         }
-        if (rayDirY < 0)
+        if (rayDiry < 0)
         {
             stepY     = -1;
-            sideDistY = (player->posY - mapY) * deltaDistY;
+            sideDistY = (player->posy - mapY) * deltaDistY;
         }
         else
         {
             stepY     = 1;
-            sideDistY = (mapY + 1.0f - player->posY) * deltaDistY;
+            sideDistY = (mapY + 1.0f - player->posy) * deltaDistY;
         }
 
         // Parcours DDA jusqu’au mur
@@ -87,16 +87,16 @@ void castRays(t_env *env)
         // Distance perpendiculaire pour éviter le fish-eye
         float perpWallDist;
         if (side == 0)
-            perpWallDist = (mapX - player->posX + (1 - stepX) / 2.0f) / rayDirX;
+            perpWallDist = (mapX - player->posx + (1 - stepX) / 2.0f) / rayDirx;
         else
-            perpWallDist = (mapY - player->posY + (1 - stepY) / 2.0f) / rayDirY;
+            perpWallDist = (mapY - player->posy + (1 - stepY) / 2.0f) / rayDiry;
 
         // Calcul de la hauteur de colonne
-        int lineHeight = (int)(screenHeight / perpWallDist + 10);
+        int lineHeight = (int)(SCREENHEIGHT / perpWallDist + 10);
 
         // Position en haut et en bas sur l’écran (sans la clamping encore)
-        int drawStart = -lineHeight / 2 + screenHeight / 2;
-        int drawEnd   =  lineHeight / 2 + screenHeight / 2;
+        int drawStart = -lineHeight / 2 + SCREENHEIGHT / 2;
+        int drawEnd   =  lineHeight / 2 + SCREENHEIGHT / 2;
 
         // Choix de la texture selon la face touchée
         void *texture = NULL;
@@ -104,37 +104,37 @@ void castRays(t_env *env)
         {
             // Rayon E ou W
             if (stepX > 0)
-                texture = env->img_textures->wall_E; 
+                texture = env->img_textures->wall_e; 
             else
-                texture = env->img_textures->wall_W;
+                texture = env->img_textures->wall_w;
         }
         else
         {
             // Rayon S ou N
             if (stepY > 0)
-                texture = env->img_textures->wall_S;
+                texture = env->img_textures->wall_s;
             else
-                texture = env->img_textures->wall_N;
+                texture = env->img_textures->wall_n;
         }
 
-        // Calcul de la coordonnée X sur la texture [0..texWidth-1]
+        // Calcul de la coordonnée X sur la texture [0..TEXWIDTH-1]
         float wallX;
         if (side == 0)
-            wallX = player->posY + perpWallDist * rayDirY;
+            wallX = player->posy + perpWallDist * rayDiry;
         else
-            wallX = player->posX + perpWallDist * rayDirX;
+            wallX = player->posx + perpWallDist * rayDirx;
         wallX -= floor(wallX);
 
-        int texX = (int)(wallX * (float)texWidth);
+        int texX = (int)(wallX * (float)TEXWIDTH);
         // Inversion éventuelle de la texture (pour éviter de la dessiner à l’envers)
-        if ((side == 0 && rayDirX > 0) || (side == 1 && rayDirY < 0))
-            texX = texWidth - texX - 1;
+        if ((side == 0 && rayDirx > 0) || (side == 1 && rayDiry < 0))
+            texX = TEXWIDTH - texX - 1;
 
         // Clamping vertical (on ne redimensionne PAS, on coupe juste ce qui sort de l’écran)
         if (drawStart < 0)
             drawStart = 0;
-        if (drawEnd >= screenHeight)
-            drawEnd = screenHeight - 1;
+        if (drawEnd >= SCREENHEIGHT)
+            drawEnd = SCREENHEIGHT - 1;
 
         // Dessin de la bande texturée
         drawTexturedLine(env, x, drawStart, drawEnd, texture, texX, lineHeight);
@@ -174,38 +174,38 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
     // Avancer (Up)
     if (env->keys.up)
     {
-        float newX = player->posX + player->dirX * moveSpeed;
-        float newY = player->posY + player->dirY * moveSpeed;
+        float newX = player->posx + player->dirx * moveSpeed;
+        float newY = player->posy + player->diry * moveSpeed;
 
         // Mise à jour de X (ne teste pas newY)
-        if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map))
+        if (isFree(newX + collision_margin, player->posy, map) &&
+            isFree(newX - collision_margin, player->posy, map))
         {
-            player->posX = newX;
+            player->posx = newX;
         }
         // Mise à jour de Y (ne teste pas newX)
-        if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map))
+        if (isFree(player->posx, newY + collision_margin, map) &&
+            isFree(player->posx, newY - collision_margin, map))
         {
-            player->posY = newY;
+            player->posy = newY;
         }
     }
 
     // Reculer (Down)
     if (env->keys.down)
     {
-        float newX = player->posX - player->dirX * moveSpeed;
-        float newY = player->posY - player->dirY * moveSpeed;
+        float newX = player->posx - player->dirx * moveSpeed;
+        float newY = player->posy - player->diry * moveSpeed;
 
-        if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map))
+        if (isFree(newX + collision_margin, player->posy, map) &&
+            isFree(newX - collision_margin, player->posy, map))
         {
-            player->posX = newX;
+            player->posx = newX;
         }
-        if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map))
+        if (isFree(player->posx, newY + collision_margin, map) &&
+            isFree(player->posx, newY - collision_margin, map))
         {
-            player->posY = newY;
+            player->posy = newY;
         }
     }
 
@@ -213,20 +213,20 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
     if (env->keys.strafe_left)
     {
         // Vecteur perpendiculaire à la direction (tourné à gauche)
-        float dirX_perp = -player->dirY;
-        float dirY_perp =  player->dirX;
-        float newX = player->posX + dirX_perp * moveSpeed;
-        float newY = player->posY + dirY_perp * moveSpeed;
+        float dirx_perp = -player->diry;
+        float diry_perp =  player->dirx;
+        float newX = player->posx + dirx_perp * moveSpeed;
+        float newY = player->posy + diry_perp * moveSpeed;
 
-        if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map))
+        if (isFree(newX + collision_margin, player->posy, map) &&
+            isFree(newX - collision_margin, player->posy, map))
         {
-            player->posX = newX;
+            player->posx = newX;
         }
-        if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map))
+        if (isFree(player->posx, newY + collision_margin, map) &&
+            isFree(player->posx, newY - collision_margin, map))
         {
-            player->posY = newY;
+            player->posy = newY;
         }
     }
 
@@ -234,45 +234,45 @@ void movePlayer(t_env *env, float moveSpeed, float rotSpeed)
     if (env->keys.strafe_right)
     {
         // Vecteur perpendiculaire à la direction (tourné à droite)
-        float dirX_perp =  player->dirY;
-        float dirY_perp = -player->dirX;
-        float newX = player->posX + dirX_perp * moveSpeed;
-        float newY = player->posY + dirY_perp * moveSpeed;
+        float dirx_perp =  player->diry;
+        float diry_perp = -player->dirx;
+        float newX = player->posx + dirx_perp * moveSpeed;
+        float newY = player->posy + diry_perp * moveSpeed;
 
-        if (isFree(newX + collision_margin, player->posY, map) &&
-            isFree(newX - collision_margin, player->posY, map))
+        if (isFree(newX + collision_margin, player->posy, map) &&
+            isFree(newX - collision_margin, player->posy, map))
         {
-            player->posX = newX;
+            player->posx = newX;
         }
-        if (isFree(player->posX, newY + collision_margin, map) &&
-            isFree(player->posX, newY - collision_margin, map))
+        if (isFree(player->posx, newY + collision_margin, map) &&
+            isFree(player->posx, newY - collision_margin, map))
         {
-            player->posY = newY;
+            player->posy = newY;
         }
     }
 
     // Rotation à gauche
     if (env->keys.left)
     {
-        float oldDirX = player->dirX;
-        player->dirX = player->dirX * cos(rotSpeed) - player->dirY * sin(rotSpeed);
-        player->dirY = oldDirX * sin(rotSpeed) + player->dirY * cos(rotSpeed);
+        float oldDirx = player->dirx;
+        player->dirx = player->dirx * cos(rotSpeed) - player->diry * sin(rotSpeed);
+        player->diry = oldDirx * sin(rotSpeed) + player->diry * cos(rotSpeed);
 
-        float oldPlaneX = player->planeX;
-        player->planeX = player->planeX * cos(rotSpeed) - player->planeY * sin(rotSpeed);
-        player->planeY = oldPlaneX * sin(rotSpeed) + player->planeY * cos(rotSpeed);
+        float oldPlanex = player->planex;
+        player->planex = player->planex * cos(rotSpeed) - player->planey * sin(rotSpeed);
+        player->planey = oldPlanex * sin(rotSpeed) + player->planey * cos(rotSpeed);
     }
 
     // Rotation à droite
     if (env->keys.right)
     {
-        float oldDirX = player->dirX;
-        player->dirX = player->dirX * cos(-rotSpeed) - player->dirY * sin(-rotSpeed);
-        player->dirY = oldDirX * sin(-rotSpeed) + player->dirY * cos(-rotSpeed);
+        float oldDirx = player->dirx;
+        player->dirx = player->dirx * cos(-rotSpeed) - player->diry * sin(-rotSpeed);
+        player->diry = oldDirx * sin(-rotSpeed) + player->diry * cos(-rotSpeed);
 
-        float oldPlaneX = player->planeX;
-        player->planeX = player->planeX * cos(-rotSpeed) - player->planeY * sin(-rotSpeed);
-        player->planeY = oldPlaneX * sin(-rotSpeed) + player->planeY * cos(-rotSpeed);
+        float oldPlanex = player->planex;
+        player->planex = player->planex * cos(-rotSpeed) - player->planey * sin(-rotSpeed);
+        player->planey = oldPlanex * sin(-rotSpeed) + player->planey * cos(-rotSpeed);
     }
 }
 
@@ -289,17 +289,17 @@ void drawTexturedLine(t_env *env,
         return;
 
     // À combien de “pixels” de la texture on avance pour chaque pixel d’écran :
-    double step = (double)texHeight / (double)lineHeight;
+    double step = (double)TEXHEIGHT / (double)lineHeight;
 
     // Calcul de la position Y “initiale” dans la texture
     //  (drawStart - milieuEcran + moitiéColonne) * step
-    double texPos = (drawStart - (screenHeight / 2) + (lineHeight / 2)) * step;
+    double texPos = (drawStart - (SCREENHEIGHT / 2) + (lineHeight / 2)) * step;
 
     // On parcourt du haut de la colonne jusqu’au bas
     for (int y = drawStart; y < drawEnd; y++)
     {
         // On mappe le Y écran -> Y de la texture
-        int texY = (int)texPos & (texHeight - 1); 
+        int texY = (int)texPos & (TEXHEIGHT - 1); 
         texPos += step;
 
         // On récupère la couleur de la texture

@@ -6,7 +6,7 @@
 /*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:07:22 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/26 16:46:10 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/03/31 11:52:26 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void draw_image_with_transparency(t_env *env, void *img, int pos_x, int pos_y, i
             {
                 int dest_x = pos_x + x;
                 int dest_y = pos_y + y;
-                if (dest_x >= 0 && dest_x < screenWidth && dest_y >= 0 && dest_y < screenHeight)
+                if (dest_x >= 0 && dest_x < SCREENWIDTH && dest_y >= 0 && dest_y < SCREENHEIGHT)
                 {
                     char *dst = env->addr + (dest_y * env->line_length + dest_x * (env->bits_per_pixel / 8));
                     *(unsigned int *)dst = pixel;
@@ -64,10 +64,10 @@ void render_ceiling_floor(t_env *env)
     
     // Dessiner le plafond (utiliser le buffer d'image)
     y = 0;
-    while (y < screenHeight / 2)
+    while (y < SCREENHEIGHT / 2)
     {
         x = 0;
-        while (x < screenWidth)
+        while (x < SCREENWIDTH)
         {
             char *dst = env->addr + (y * env->line_length + x * (env->bits_per_pixel / 8));
             *(unsigned int *)dst = ceiling_color;
@@ -77,10 +77,10 @@ void render_ceiling_floor(t_env *env)
     }
     
     // Dessiner le sol (utiliser le buffer d'image)
-    while (y < screenHeight)
+    while (y < SCREENHEIGHT)
     {
         x = 0;
-        while (x < screenWidth)
+        while (x < SCREENWIDTH)
         {
             char *dst = env->addr + (y * env->line_length + x * (env->bits_per_pixel / 8));
             *(unsigned int *)dst = floor_color;
@@ -124,7 +124,7 @@ int render_frame(t_env *env)
     movePlayer(env, moveSpeed, rotSpeed);
     
     // 2) Créer la nouvelle image (frame) et récupérer son buffer
-    env->img = mlx_new_image(env->mlx, screenWidth, screenHeight);
+    env->img = mlx_new_image(env->mlx, SCREENWIDTH, SCREENHEIGHT);
     env->addr = mlx_get_data_addr(env->img, &env->bits_per_pixel, &env->line_length, &env->endian);
     
     // 3) Dessiner le plafond et le sol
@@ -142,7 +142,7 @@ int render_frame(t_env *env)
     // 7) Afficher le HUD avec transparence (et non plus via mlx_put_image_to_window)
     if (env->img_textures->hud_img)
     {
-        int hud_x = screenWidth - 170; 
+        int hud_x = SCREENWIDTH - 170; 
         int hud_y = 10;
         draw_image_with_transparency(env,
             env->img_textures->hud_img,
@@ -153,8 +153,8 @@ int render_frame(t_env *env)
     }
     if (env->img_textures->rifle_img)
     {
-        int rifle_x = screenWidth - 822; 
-        int rifle_y = screenHeight - 504;
+        int rifle_x = SCREENWIDTH - 822; 
+        int rifle_y = SCREENHEIGHT - 504;
         draw_image_with_transparency(env,
             env->img_textures->rifle_img,
             rifle_x,
