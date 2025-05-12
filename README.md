@@ -2,7 +2,8 @@
 
 Cub3D est un projet de l'école 42 inspiré du moteur de rendu de **Wolfenstein 3D**. Il s'agit d'un **mini-FPS** en **vue subjective**, développé en **C** avec la bibliothèque **MiniLibX**, utilisant la technique du **raycasting** pour générer un environnement 3D à partir d'une carte en 2D.   
 
-![Gameplay](.asset/cube3d.gif)
+<img src="https://raw.githubusercontent.com/Mehdo0/cube3d/.asset/cube3d.gif" width="600" alt="Gameplay">
+
 
 
 ## Fonctionnalités  
