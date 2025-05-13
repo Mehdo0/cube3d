@@ -3,26 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:01:50 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/24 16:27:20 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:15:46 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
 
-void ft_map_error(char *error_msg)
+void	ft_map_error(char *error_msg)
 {
-    printf("%s", error_msg);
-    exit(EXIT_FAILURE);
+	printf("%s", error_msg);
+	exit(EXIT_FAILURE);
 }
 
-int ft_isspace(char s)
+int	ft_isspace(char s)
 {
-    if (s == ' ' || s == '\t' || s == '\n' || s == '\v' || s == '\f' || s == '\r')
-        return (1);
-    return (0);
+	if (s == ' ' || s == '\t' || s == '\n'
+		|| s == '\v' || s == '\f' || s == '\r')
+		return (1);
+	return (0);
 }
 
 char	*ft_strtok(char *str, const char *delim)
@@ -75,5 +76,5 @@ size_t	ft_strcspn(const char *s, const char *reject)
 
 int	create_rgb(int r, int g, int b)
 {
-	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + ((b & 0xff)));
 }

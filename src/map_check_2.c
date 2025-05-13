@@ -1,58 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_check_helper.c                                 :+:      :+:    :+:   */
+/*   map_check_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 14:02:28 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/05/13 15:52:03 by kgiraud          ###   ########.fr       */
+/*   Created: 2025/03/31 11:26:13 by mmouaffa          #+#    #+#             */
+/*   Updated: 2025/05/13 17:16:28 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
 
-int	array_len(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-		i++;
-	return (i);
-}
-
-int	is_wall(char c)
-{
-	return (c == '1');
-}
-
-int	is_space_or_player(char c)
-{
-	return (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
-}
-
-int	is_valid_map_char(char c)
-{
-	return (is_wall(c) || is_space_or_player(c) || c == ' ');
-}
-
-int	check_map_chars(char **map, int height)
+void	ft_check_borders(t_config *config)
 {
 	int	i;
 	int	j;
+	int	width;
+	int	height;
 
+	height = config->map.height;
 	i = 0;
 	while (i < height)
 	{
+		width = ft_strlen(config->map.grid[i]);
 		j = 0;
-		while (map[i][j])
+		while (j < width)
 		{
-			if (!is_valid_map_char(map[i][j]))
-				return (0);
+			if (is_space_or_player(config->map.grid[i][j]))
+			{
+				if (i == 0 || j == 0 || i == height - 1 || j == width - 1
+					|| !check_position(config->map.grid, i, j, height))
+					ft_map_error("La map n'est pas fermée\n");
+			}
 			j++;
 		}
 		i++;
 	}
-	return (1);
 }

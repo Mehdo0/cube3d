@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 11:26:13 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/03/31 14:53:51 by mmouaffa         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:16:21 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@ static int	check_position(char **map, int i, int j, int height)
 	width = ft_strlen(map[i]);
 	if (i == 0 || j == 0 || i == height - 1 || j == width - 1)
 		return (0);
-	if (i > 0 && (map[i - 1][j] == ' ' || !is_valid_map_char(map[i - 1][j])))
+	if (i > 0 && (map[i - 1][j] == ' '
+		|| !is_valid_map_char(map[i - 1][j])))
 		return (0);
-	if (i < height - 1 && (map[i + 1][j] == ' ' || !is_valid_map_char(map[i + 1][j])))
+	if (i < height - 1 && (map[i + 1][j] == ' '
+		|| !is_valid_map_char(map[i + 1][j])))
 		return (0);
 	if (j > 0 && (map[i][j - 1] == ' ' || !is_valid_map_char(map[i][j - 1])))
 		return (0);
-	if (j < width - 1 && (map[i][j + 1] == ' ' || !is_valid_map_char(map[i][j + 1])))
+	if (j < width - 1 && (map[i][j + 1] == ' '
+		|| !is_valid_map_char(map[i][j + 1])))
 		return (0);
 	return (1);
 }
@@ -55,14 +58,12 @@ static int	check_map_closed(char **map)
 	return (1);
 }
 
-static int	find_map_section(char **file, int *start, int *end)
+static int	find_map_start(char **file, int *start)
 {
 	int	i;
 	int	j;
-	int	found_map;
 
 	i = 0;
-	found_map = 0;
 	while (file[i])
 	{
 		j = 0;
@@ -71,40 +72,22 @@ static int	find_map_section(char **file, int *start, int *end)
 			if (file[i][j] == '1')
 			{
 				*start = i;
-				found_map = 1;
-				break ;
+				return (1);
 			}
 			j++;
 		}
-		if (found_map)
-			break ;
 		i++;
 	}
-	if (!found_map)
+	return (0);
+}
+
+static int	find_map_section(char **file, int *start, int *end)
+{
+	if (!find_map_start(file, start))
 		return (0);
 	*end = *start;
 	while (file[*end] && ft_strlen(file[*end]) > 0)
 		(*end)++;
-	return (1);
-}
-
-static int	check_map_chars(char **map, int height)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < height)
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (!is_valid_map_char(map[i][j]))
-				return (0);
-			j++;
-		}
-		i++;
-	}
 	return (1);
 }
 
