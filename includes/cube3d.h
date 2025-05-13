@@ -6,7 +6,7 @@
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/05/13 16:29:57 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/05/13 17:31:27 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ void		set_player_direction2(t_player *player, char direction);
 /*
 ** map_check.c
 */
-
+int			check_position(char **map, int i, int j, int height);
 void		map_checker(char **file);
 int			array_len(char **arr);
 int			is_wall(char c);

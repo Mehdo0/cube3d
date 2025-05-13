@@ -12,7 +12,7 @@
 
 #include "../includes/cube3d.h"
 
-static int	check_position(char **map, int i, int j, int height)
+int	check_position(char **map, int i, int j, int height)
 {
 	int	width;
 
