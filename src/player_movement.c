@@ -14,7 +14,19 @@
 
 static int	is_free(float x, float y, t_map *map)
 {
-	return (map->grid[(int)y][(int)x] == '0');
+	int		int_x;
+	int		int_y;
+	char	cell;
+
+	int_x = (int)x;
+	int_y = (int)y;
+	if (int_x < 0 || int_y < 0 || int_x >= map->width
+		|| int_y >= map->height)
+		return (0);
+	if (int_x >= (int)ft_strlen(map->grid[int_y]))
+		return (0);
+	cell = map->grid[int_y][int_x];
+	return (cell == '0' || cell == 'N' || cell == 'S' || cell == 'E' || cell == 'W');
 }
 
 void	handle_forward(t_player *player, t_map *map, float move_speed)
@@ -23,14 +35,12 @@ void	handle_forward(t_player *player, t_map *map, float move_speed)
 	float	new_y;
 	float	margin;
 
-	margin = 0.01f;
+	margin = 0.2f;
 	new_x = player->posx + player->dirx * move_speed;
 	new_y = player->posy + player->diry * move_speed;
-	if (is_free(new_x + margin, player->posy, map)
-		&& is_free(new_x - margin, player->posy, map))
+	if (is_free(new_x + (player->dirx > 0 ? margin : -margin), player->posy, map))
 		player->posx = new_x;
-	if (is_free(player->posx, new_y + margin, map)
-		&& is_free(player->posx, new_y - margin, map))
+	if (is_free(player->posx, new_y + (player->diry > 0 ? margin : -margin), map))
 		player->posy = new_y;
 }
 
@@ -52,23 +62,20 @@ void	handle_rotation(t_player *player, float rot_speed, int direction)
 void	handle_strafe(t_player *player, t_map *map,
 		float move_speed, int direction)
 {
-	float	new_x;
-	float	new_y;
+	float	dx;
+	float	dy;
 	float	margin;
-	float	dirx_perp;
-	float	diry_perp;
 
-	margin = 0.01f;
-	dirx_perp = direction * -player->diry;
-	diry_perp = direction * player->dirx;
-	new_x = player->posx + dirx_perp * move_speed;
-	new_y = player->posy + diry_perp * move_speed;
-	if (is_free(new_x + margin, player->posy, map)
-		&& is_free(new_x - margin, player->posy, map))
-		player->posx = new_x;
-	if (is_free(player->posx, new_y + margin, map)
-		&& is_free(player->posx, new_y - margin, map))
-		player->posy = new_y;
+	margin = 0.3f;
+	dx = direction * -player->diry * move_speed;
+	dy = direction * player->dirx * move_speed;
+
+	// Teste d'abord l'axe X seul
+	if (is_free(player->posx + dx, player->posy, map))
+		player->posx += dx;
+	// Puis l'axe Y seul
+	if (is_free(player->posx, player->posy + dy, map))
+		player->posy += dy;
 }
 
 void	move_player(t_env *env, float move_speed, float rot_speed)

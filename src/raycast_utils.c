@@ -20,13 +20,11 @@ void	calc_wall_data(t_wall *wall, t_ray *ray, t_player *player)
 	else
 		wall->perp_wall_dist = (ray->map_y - player->posy
 				+ (1 - ray->step_y) / 2.0f) / ray->ray_diry;
-	wall->line_height = (int)(SCREENHEIGHT / wall->perp_wall_dist + 10);
+	wall->line_height = (int)(SCREENHEIGHT / wall->perp_wall_dist);
+
+	// Calcul des bornes brutes (non clampées)
 	wall->draw_start = -wall->line_height / 2 + SCREENHEIGHT / 2;
 	wall->draw_end = wall->line_height / 2 + SCREENHEIGHT / 2;
-	if (wall->draw_start < 0)
-		wall->draw_start = 0;
-	if (wall->draw_end >= SCREENHEIGHT)
-		wall->draw_end = SCREENHEIGHT - 1;
 }
 
 void	select_texture(t_wall *wall, t_ray *ray, t_env *env)
@@ -62,34 +60,23 @@ void	calc_texture_x(t_wall *wall, t_ray *ray, t_player *player)
 
 void	draw_wall_line(t_env *env, int x, t_wall *wall)
 {
-	draw_textured_line(env, x, wall->draw_start, wall->draw_end,
-		wall->texture, wall->tex_x, wall->line_height);
+	t_draw_line_params	params;
+
+	params.x = x;
+	params.start = wall->draw_start;
+	params.end = wall->draw_end;
+	params.texture = wall->texture;
+	params.tex_x = wall->tex_x;
+	// Appel direct sans clamp préalable
+	draw_textured_line(env, &params);
 }
 
-void draw_textured_line(t_env *env, int x, int drawStart, int drawEnd, 
-						void *texture, int texX, int lineHeight)
+static void	init_tex_drawing(t_tex *tex_info, void *texture,
+		int start, int end)
 {
-	int		y;
-	int		texY;
-	int		color;
-	double	step;
-	double	texPos;
-	char	*tex_data;
-	int		tex_bpp;
-	int		tex_line_length;
-	int		tex_endian;
-
-	tex_data = mlx_get_data_addr(texture, &tex_bpp, &tex_line_length, &tex_endian);
-	step = 1.0 * TEXHEIGHT / lineHeight;
-	texPos = (drawStart - SCREENHEIGHT / 2 + lineHeight / 2) * step;
-	
-	y = drawStart;
-	while (y < drawEnd)
-	{
-		texY = (int)texPos & (TEXHEIGHT - 1);
-		texPos += step;
-		color = *(int*)(tex_data + texY * tex_line_length + texX * (tex_bpp / 8));
-		put_pixel(env, x, y, color);
-		y++;
-	}
+	tex_info->data = mlx_get_data_addr(texture, &tex_info->bpp,
+			&tex_info->line_len, &tex_info->endian);
+	tex_info->step = 1.0 * TEXHEIGHT / (end - start);
+	tex_info->pos = (start - SCREENHEIGHT / 2 + (end - start) / 2)
+		* tex_info->step;
 }

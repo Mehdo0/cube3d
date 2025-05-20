@@ -6,7 +6,7 @@
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 22:20:36 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/05/13 16:08:32 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/05/19 15:52:44 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ static void	draw_tile(t_env *env, t_minimap_draw_params *params)
 void	draw_walls(t_env *env, int start_x, int start_y, int tile_size)
 {
 	t_minimap_draw_params	params;
-	int				x;
-	int				y;
+	int						x;
+	int						y;
 
 	y = 0;
 	while (y < env->config->map.height)

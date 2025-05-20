@@ -51,19 +51,19 @@ void	draw_minimap(t_env *env)
 	draw_border(env, &map);
 }
 
-int is_valid_screen_pos(int x, int y)
+int	is_valid_screen_pos(int x, int y)
 {
 	return (x >= 0 && x < SCREENWIDTH && y >= 0 && y < SCREENHEIGHT);
 }
 
-int get_tile_color(char tile)
+int	get_tile_color(char tile)
 {
 	if (tile == '1')
-		return (0xFFFFFF);  // Mur blanc
+		return (0xFFFFFF);
 	else if (tile == '0')
-		return (0x44000000);  // Espace transparent
+		return (0x44000000);
 	else if (tile == 'N' || tile == 'S' || tile == 'E' || tile == 'W')
-		return (0x44FF0000);  // Position du joueur en rouge transparent
+		return (0x44FF0000);
 	else
-		return (0x44000000);  // Par défaut, transparent
+		return (0x44000000);
 }

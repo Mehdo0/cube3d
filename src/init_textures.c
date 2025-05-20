@@ -6,7 +6,7 @@
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:56:24 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/05/13 17:17:21 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/05/19 16:09:10 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ void	create_color_textures(t_env *env)
 	fill_texture(textures[3], colors[3], width, height);
 }
 
-static void	check_texture_paths(t_env *env)
+void	check_texture_paths(t_env *env)
 {
 	if (!env->config->no || !env->config->so
 		|| !env->config->ea || !env->config->we)
 		ft_map_error("Error\nMissing texture path in configuration\n");
 }
 
-static void	load_wall_textures(t_env *env, int *width, int *height)
+void	load_wall_textures(t_env *env, int *width, int *height)
 {
 	env->img_textures->wall_n = mlx_xpm_file_to_image(env->mlx,
 			env->config->no, width, height);
@@ -74,26 +74,4 @@ static void	load_wall_textures(t_env *env, int *width, int *height)
 			env->config->ea, width, height);
 	env->img_textures->wall_w = mlx_xpm_file_to_image(env->mlx,
 			env->config->we, width, height);
-}
-
-int init_img_textures(t_env *env)
-{
-	int	width;
-	int	height;
-
-	check_texture_paths(env);
-	load_wall_textures(env, &width, &height);
-	
-	// Vérifier si les textures ont été chargées correctement
-	if (!env->img_textures->wall_n || !env->img_textures->wall_s ||
-		!env->img_textures->wall_e || !env->img_textures->wall_w)
-		return (1);
-		
-	// Charger les textures supplémentaires (HUD et arme)
-	env->img_textures->hud_img = mlx_xpm_file_to_image(env->mlx,
-			"textures/hud.xpm", &width, &height);
-	env->img_textures->rifle_img = mlx_xpm_file_to_image(env->mlx,
-			"textures/rifle.xpm", &width, &height);
-	
-	return (0);
 }

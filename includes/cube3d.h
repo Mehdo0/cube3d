@@ -6,7 +6,7 @@
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/05/13 17:31:27 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/05/19 16:15:18 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,25 @@ typedef struct s_minimap_draw_params
 	int	tile_size;
 }	t_minimap_draw_params;
 
+typedef struct s_tex
+{
+	char	*data;
+	int		bpp;
+	int		line_len;
+	int		endian;
+	double	step;
+	double	pos;
+}	t_tex;
+
+typedef struct s_draw_line_params
+{
+	int		x;
+	int		start;
+	int		end;
+	void	*texture;
+	int		tex_x;
+}	t_draw_line_params;
+
 /*
 ** Hooks
 */
@@ -232,8 +251,6 @@ void		draw_image_with_transparency(t_env *env, void *img, int pos_x,
 void		cast_rays(t_env *env);
 void		move_player(t_env *env, float moveSpeed, float rotSpeed);
 void		draw_vertical_line(t_env *env, t_line *line);
-void		draw_textured_line(t_env *env, int x, int drawStart, int drawEnd,
-				void *texture, int texX, int lineHeight);
 void		init_ray(t_ray *ray, t_player *player, int x);
 void		calc_step_and_side_dist(t_ray *ray, t_player *player);
 void		perform_dda(t_ray *ray, t_map *map);
@@ -289,5 +306,12 @@ void		handle_forward(t_player *player, t_map *map, float move_speed);
 void		handle_rotation(t_player *player, float rot_speed, int direction);
 void		handle_strafe(t_player *player, t_map *map, float move_speed,
 				int direction);
+
+/*
+** texture_utils.c
+*/
+void		draw_textured_line(t_env *env, t_draw_line_params *params);
+void		check_texture_paths(t_env *env);
+void		load_wall_textures(t_env *env, int *width, int *height);
 
 #endif
