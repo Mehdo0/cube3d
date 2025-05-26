@@ -6,7 +6,7 @@
 /*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:41:34 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/05/19 16:15:18 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/05/26 11:20:34 by kgiraud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,15 @@ typedef struct s_draw_line_params
 	void	*texture;
 	int		tex_x;
 }	t_draw_line_params;
+
+typedef struct s_tex_draw_params
+{
+	int	start;
+	int	end;
+	int	line_height;
+	int	*draw_start;
+	int	*draw_end;
+}		t_tex_draw_params;
 
 /*
 ** Hooks

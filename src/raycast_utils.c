@@ -21,8 +21,6 @@ void	calc_wall_data(t_wall *wall, t_ray *ray, t_player *player)
 		wall->perp_wall_dist = (ray->map_y - player->posy
 				+ (1 - ray->step_y) / 2.0f) / ray->ray_diry;
 	wall->line_height = (int)(SCREENHEIGHT / wall->perp_wall_dist);
-
-	// Calcul des bornes brutes (non clampées)
 	wall->draw_start = -wall->line_height / 2 + SCREENHEIGHT / 2;
 	wall->draw_end = wall->line_height / 2 + SCREENHEIGHT / 2;
 }
@@ -67,7 +65,6 @@ void	draw_wall_line(t_env *env, int x, t_wall *wall)
 	params.end = wall->draw_end;
 	params.texture = wall->texture;
 	params.tex_x = wall->tex_x;
-	// Appel direct sans clamp préalable
 	draw_textured_line(env, &params);
 }
 

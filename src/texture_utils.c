@@ -13,45 +13,42 @@
 #include "../includes/cube3d.h"
 
 static void	init_tex_drawing(t_tex *tex_info, void *texture,
-		int start, int end, int line_height, int *draw_start, int *draw_end)
+		t_tex_draw_params *params)
 {
 	tex_info->data = mlx_get_data_addr(texture, &tex_info->bpp,
 			&tex_info->line_len, &tex_info->endian);
-	tex_info->step = (double)TEXHEIGHT / line_height;
-	tex_info->pos = (start - SCREENHEIGHT / 2 + line_height / 2)
+	tex_info->step = (double)TEXHEIGHT / params->line_height;
+	tex_info->pos = (params->start - SCREENHEIGHT / 2 + params->line_height / 2)
 		* tex_info->step;
-	if (*draw_start < 0)
+	if (*(params->draw_start) < 0)
 	{
-		tex_info->pos += (-(*draw_start)) * tex_info->step;
-		*draw_start = 0;
+		tex_info->pos += (-(*(params->draw_start))) * tex_info->step;
+		*(params->draw_start) = 0;
 	}
-	if (*draw_end >= SCREENHEIGHT)
-		*draw_end = SCREENHEIGHT - 1;
+	if (*(params->draw_end) >= SCREENHEIGHT)
+		*(params->draw_end) = SCREENHEIGHT - 1;
 }
 
 void	draw_textured_line(t_env *env, t_draw_line_params *params)
 {
-	int		y;
-	int		tex_y;
-	int		color;
-	t_tex	tex_info;
-	int		line_height;
-	int		draw_start;
-	int		draw_end;
+	t_tex				tex_info;
+	t_tex_draw_params	draw_params;
+	int					y;
 
-	line_height = params->end - params->start;
-	draw_start = params->start;
-	draw_end = params->end - 1;
-	init_tex_drawing(&tex_info, params->texture, params->start, params->end,
-		line_height, &draw_start, &draw_end);
-	y = draw_start;
-	while (y <= draw_end)
+	draw_params.line_height = params->end - params->start;
+	draw_params.start = params->start;
+	draw_params.end = params->end;
+	draw_params.draw_start = &draw_params.start;
+	draw_params.draw_end = &draw_params.end;
+	draw_params.end--;
+	init_tex_drawing(&tex_info, params->texture, &draw_params);
+	y = draw_params.start;
+	while (y <= draw_params.end)
 	{
-		tex_y = (int)tex_info.pos & (TEXHEIGHT - 1);
+		put_pixel(env, params->x, y++,
+			*(int *)(tex_info.data
+				+ ((int)tex_info.pos & (TEXHEIGHT - 1)) * tex_info.line_len
+				+ params->tex_x * (tex_info.bpp / 8)));
 		tex_info.pos += tex_info.step;
-		color = *(int *)(tex_info.data + tex_y * tex_info.line_len
-				+ params->tex_x * (tex_info.bpp / 8));
-		put_pixel(env, params->x, y, color);
-		y++;
 	}
 }

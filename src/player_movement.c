@@ -26,7 +26,8 @@ static int	is_free(float x, float y, t_map *map)
 	if (int_x >= (int)ft_strlen(map->grid[int_y]))
 		return (0);
 	cell = map->grid[int_y][int_x];
-	return (cell == '0' || cell == 'N' || cell == 'S' || cell == 'E' || cell == 'W');
+	return (cell == '0' || cell == 'N' || cell == 'S'
+		|| cell == 'E' || cell == 'W');
 }
 
 void	handle_forward(t_player *player, t_map *map, float move_speed)
@@ -34,13 +35,21 @@ void	handle_forward(t_player *player, t_map *map, float move_speed)
 	float	new_x;
 	float	new_y;
 	float	margin;
+	float	margin_x;
+	float	margin_y;
 
 	margin = 0.2f;
 	new_x = player->posx + player->dirx * move_speed;
 	new_y = player->posy + player->diry * move_speed;
-	if (is_free(new_x + (player->dirx > 0 ? margin : -margin), player->posy, map))
+	margin_x = margin;
+	if (player->dirx <= 0)
+		margin_x = -margin;
+	margin_y = margin;
+	if (player->diry <= 0)
+		margin_y = -margin;
+	if (is_free(new_x + margin_x, player->posy, map))
 		player->posx = new_x;
-	if (is_free(player->posx, new_y + (player->diry > 0 ? margin : -margin), map))
+	if (is_free(player->posx, new_y + margin_y, map))
 		player->posy = new_y;
 }
 
@@ -69,11 +78,8 @@ void	handle_strafe(t_player *player, t_map *map,
 	margin = 0.3f;
 	dx = direction * -player->diry * move_speed;
 	dy = direction * player->dirx * move_speed;
-
-	// Teste d'abord l'axe X seul
 	if (is_free(player->posx + dx, player->posy, map))
 		player->posx += dx;
-	// Puis l'axe Y seul
 	if (is_free(player->posx, player->posy + dy, map))
 		player->posy += dy;
 }
