@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:56:24 by mmouaffa          #+#    #+#             */
-/*   Updated: 2025/05/13 17:09:05 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/06/05 11:48:59 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	load_textures(t_env *env)
 	if (init_img_textures(env) != 0)
 	{
 		printf("Failed to load textures from files, using color textures\n");
-		create_color_textures(env);
+		ft_map_error("Error\n");
 	}
 	if (!env->img_textures->wall_n || !env->img_textures->wall_s
 		|| !env->img_textures->wall_e || !env->img_textures->wall_w)

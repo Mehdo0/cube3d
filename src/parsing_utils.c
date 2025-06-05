@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgiraud <kgiraud@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: mmouaffa <mmouaffa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:41:17 by kgiraud           #+#    #+#             */
-/*   Updated: 2025/05/13 15:41:51 by kgiraud          ###   ########.fr       */
+/*   Updated: 2025/06/05 11:43:34 by mmouaffa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ void	ft_parse_color_line(t_config *config, char *trimmed, char type)
 		if (ft_parse_color(color_str, config->ceiling) != 0)
 			ft_map_error("Error\nInvalid ceiling color format\n");
 	}
+	else
+		ft_map_error("Error\nMissing colors\n");
 }
 
 void	ft_add_map_line(t_config *config, char *line)
