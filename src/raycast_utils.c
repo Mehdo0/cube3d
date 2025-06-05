@@ -67,13 +67,3 @@ void	draw_wall_line(t_env *env, int x, t_wall *wall)
 	params.tex_x = wall->tex_x;
 	draw_textured_line(env, &params);
 }
-
-static void	init_tex_drawing(t_tex *tex_info, void *texture,
-		int start, int end)
-{
-	tex_info->data = mlx_get_data_addr(texture, &tex_info->bpp,
-			&tex_info->line_len, &tex_info->endian);
-	tex_info->step = 1.0 * TEXHEIGHT / (end - start);
-	tex_info->pos = (start - SCREENHEIGHT / 2 + (end - start) / 2)
-		* tex_info->step;
-}

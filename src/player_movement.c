@@ -73,9 +73,7 @@ void	handle_strafe(t_player *player, t_map *map,
 {
 	float	dx;
 	float	dy;
-	float	margin;
 
-	margin = 0.3f;
 	dx = direction * -player->diry * move_speed;
 	dy = direction * player->dirx * move_speed;
 	if (is_free(player->posx + dx, player->posy, map))
