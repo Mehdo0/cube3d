@@ -32,14 +32,18 @@ Optimisations : correction de la distorsion en "fish-eye" et amélioration des p
 Cloner le dépôt :
 
 git clone https://github.com/Mehdo0/cube3d.git
+
 cd cube3d
+
 Compiler le projet :
 
 make
+
 Exécuter le programme :
 
-./cub3D maps/map.cub
-Assurez-vous que le fichier map.cub est correctement configuré et présent dans le dossier maps/.
+./cub3D maps/good/map.cub
+
+Assurez-vous que le fichier map.cub est correctement configuré et présent dans le dossier maps/good/.
 
 ## 📁 Structure du projet
 
