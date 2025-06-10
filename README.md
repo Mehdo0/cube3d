@@ -90,6 +90,6 @@ Pour toute question ou suggestion, n'hésitez pas à me contacter :
 
 ### GitHub : Mehdo0
 
-### Email : mehdi@example.com
+### Email : mmouaffa.student@42lausannne.ch
 
 Ce projet a été réalisé dans le cadre du cursus de l'école 42 Lausanne. Il m'a permis de renforcer mes compétences en programmation bas niveau, en mathématiques appliquées et en développement de moteurs graphiques simples.
